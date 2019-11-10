@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "exec": "ts-node --files -r tsconfig-paths/register",
-        "main": "npm run exec ./src/command/main.ts",
+        "main": "npm run exec -- ./src/command/main.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],

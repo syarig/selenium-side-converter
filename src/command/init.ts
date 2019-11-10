@@ -1,6 +1,8 @@
 
 import { promises as fs } from 'fs';
 import { join } from 'path';
+import _ from 'lodash';
+import * as lib from 'src/util';
 
 export const [
     defaultSettingsDir,
@@ -15,7 +17,7 @@ export const makeDirs = [
     defaultFilesDir
 ];
 
-const [
+export const [
     defaultXpathSettingFile,
     defaultFileSettingFile,
     defaultTextSettingFile
@@ -30,20 +32,35 @@ export const settingFiles = [
 
 export const configFile = 'ssconfig.json';
 
+const deafultConfig = {
+    inputsDir: defaultInputsDir,
+    outputsDir: defaultOutputsDir,
+    filesDir: defaultFilesDir,
+    xpathSettingFile: join(defaultSettingsDir, defaultXpathSettingFile),
+    fileSettingFile: join(defaultSettingsDir, defaultFileSettingFile),
+    textSettingFile: join(defaultSettingsDir, defaultTextSettingFile)
+}
+
 export class Init {
     public exec() {
-        const config = this.getConfig();
-        fs.writeFile(configFile, JSON.stringify(config, null, '    '))
+        fs.writeFile(configFile, JSON.stringify(deafultConfig, null, '    '))
+    }
+}
+
+export class Config {
+    private _config: object;
+
+    public async init() {
+        let config = await lib.readJson(configFile)
+        if (_.isEmpty(config)) {
+            this._config = deafultConfig;
+            return;
+        }
+
+        this._config = config;
     }
 
-    private getConfig() {
-        return {
-            inputsDir: defaultInputsDir,
-            outputsDir: defaultOutputsDir,
-            filesDir: defaultFilesDir,
-            xpathSettingFile: join(defaultSettingsDir, defaultXpathSettingFile),
-            fileSettingFile: join(defaultSettingsDir, defaultFileSettingFile),
-            textSettingFile: join(defaultSettingsDir, defaultTextSettingFile)
-        };
+    get config() {
+        return this._config;
     }
 }
