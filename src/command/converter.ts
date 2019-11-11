@@ -4,7 +4,7 @@ import { Xpath } from 'src/replace/xpath';
 import { Text } from 'src/replace/text';
 import { Replace, Command } from 'src/replace/side';
 import { promises as fs } from 'fs';
-import * as lib from 'src/util';
+import * as util from 'src/util';
 import _ from 'lodash';
 import * as path from 'path';
 
@@ -13,40 +13,33 @@ const keyCommands = 'commands';
 
 export class Converter {
     private input: object;
-    private inputFile: string;
     private replaceFile: Function;
     private replaceText: Function;
     private replaceXpath: Function;
 
     public async init(input: string, config: object) {
-        this.inputFile = input;
-        this.setInput(input);
-        await this.setReplaceFile(config);
-        await this.setReplaceText(config);
-        await this.setReplaceXpath(config);
-        console.log('ready to load settings.');
+        const getSettings: (arg: object) => object = _.curry(this.getSettingsByInput)(_.get(config, 'inputsDir'), input);
+        const fileSettingFile = await util.readJson(_.get(config, 'fileSettingFile'));
+        const textSettingFile = await util.readJson(_.get(config, 'textSettingFile'));
+        const xpathSettingFile = await util.readJson(_.get(config, 'xpathSettingFile'));
+
+        this.input = await util.readJson(input);
+        this.setReplaceFile(getSettings(fileSettingFile));
+        this.setReplaceText(getSettings(textSettingFile));
+        this.setReplaceXpath(getSettings(xpathSettingFile));
+        console.log(`ready for ${input} conversion.`);
     }
 
-    private async setReplaceFile(config: object) {
-        const settingFile = _.get(config, 'fileSettingFile');
-        const setting = this.getSettingByInput(await lib.readJson(settingFile))
+    private setReplaceFile(setting: object) {
         this.replaceFile = this.replace(new File(setting));
     }
 
-    private async setReplaceText(config: object) {
-        const settingFile = _.get(config, 'textSettingFile');
-        const setting = this.getSettingByInput(await lib.readJson(settingFile))
+    private setReplaceText(setting: object) {
         this.replaceText = this.replace(new Text(setting));
     }
 
-    private async setReplaceXpath(config: object) {
-        const settingFile = _.get(config, 'xpathSettingFile');
-        const setting = this.getSettingByInput(await lib.readJson(settingFile))
+    private setReplaceXpath(setting: object) {
         this.replaceXpath = this.replace(new Xpath(setting));
-    }
-
-    private async setInput(input: string) {
-        this.input = await lib.readJson(input);
     }
 
     public exec() {
@@ -86,7 +79,7 @@ export class Converter {
             }
 
             let replaced = target;
-            _.forEach(replace.getSettings(), (setting, key) => {
+            _.forEach(replace.getSettings(), (setting: string, key: string) => {
                 const template = replace.getTemplate(key);
                 if (target.indexOf(template) === -1) {
                     return;
@@ -98,8 +91,18 @@ export class Converter {
         }
     }
 
-    private getSettingByInput(settings: object) {
-        const basename = path.basename(this.inputFile, path.extname(this.inputFile));
-        return _.get(settings, basename, {});
+    private getSettingsByInput(inputsDir: string, inputFile: string, settings: object) {
+        const absoluteInputFile = path.resolve(inputFile);
+        let absoluteInputsDir = path.resolve(inputsDir);
+        if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
+          absoluteInputsDir = path.resolve('.');
+        }
+        let settingPath = absoluteInputFile
+          .replace(absoluteInputsDir + '/', '')
+
+        const basename = path.basename(inputFile, path.extname(inputFile));
+        settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
+
+        return _.get(settings, settingPath, {});
     }
 }

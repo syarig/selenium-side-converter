@@ -2,15 +2,40 @@
 import { Create } from 'src/command/create';
 import { Converter } from 'src/command/converter';
 import { Init, configFile, Config } from 'src/command/init';
-import * as lib from 'src/util';
+import * as util from 'src/util';
 import { Command } from 'commander';
 import _ from 'lodash';
 const program = new Command();
 
+program.version('0.0.1', '-v, --version')
+    .description('Convert selenium side file. Please enter side file.')
+    .option('-i, --input <file>', 'Input file converted and merged input side file.')
+    .option('-o, --output <file>', 'Output file converted and merged input side file.', './output.side')
+    .parse(process.argv);
+
+if (program.input) {
+    console.log('  - peppers');
+    exec();
+}
+
+async function exec() {
+    const converter = new Converter();
+    const config = await init();
+    await converter.init(program.input, config.config)
+    converter.exec()
+    converter.save(program.output);
+}
+
+async function init() {
+    const config = new Config();
+    await config.init();
+    return config;
+}
+
 program.command('convert <input>')
     .alias('c')
     .action(() => {
-        const config = lib.readJson(configFile);
+        const config = util.readJson(configFile);
     });
 
 program.command('create <appPath>')
@@ -26,21 +51,4 @@ program.command('init')
         const init = new Init();
         init.exec();
     });
-
-program.version('0.0.1', '-v, --version')
-    .description('Convert selenium side file. Please enter side file.')
-    .requiredOption('-i, --input <file>', 'Input file converted and merged input side file.')
-    .requiredOption('-o, --output <file>', 'Output file converted and merged input side file.')
-    .parse(process.argv);
-
-exec();
-
-async function exec() {
-    const converter = new Converter();
-    const config = new Config();
-    await config.init();
-    await converter.init(program.input, config.config)
-    converter.exec()
-    converter.save(program.output);
-}
 

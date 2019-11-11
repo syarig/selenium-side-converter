@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import _ from 'lodash';
-import * as lib from 'src/util';
+import * as util from 'src/util';
 
 export const [
     defaultSettingsDir,
@@ -51,7 +51,7 @@ export class Config {
     private _config: object;
 
     public async init() {
-        let config = await lib.readJson(configFile)
+        let config = await util.readJson(configFile)
         if (_.isEmpty(config)) {
             this._config = deafultConfig;
             return;
