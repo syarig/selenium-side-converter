@@ -48,19 +48,20 @@ export class Init {
 }
 
 export class Config {
-    private _config: object;
+    private config: object;
 
-    public async init() {
+    public async init(args: object = {}) {
+        this.config = deafultConfig;
         let config = await util.readJson(configFile)
-        if (_.isEmpty(config)) {
-            this._config = deafultConfig;
-            return;
-        }
-
-        this._config = config;
+        Object.assign(this.config, config);
+        Object.assign(this.config, args);
     }
 
-    get config() {
-        return this._config;
+    public get(key: string) {
+        const value = _.get(this.config, key, '');
+        if (value === '') {
+            console.log(`"${key}" config doesn't exists`);
+        }
+        return value;
     }
 }

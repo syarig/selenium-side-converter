@@ -65,3 +65,41 @@ describe('replace', () => {
         expect(mockReplace(target)).toBe(expected);
     });
 });
+
+describe('getSettingsByInput', () => {
+    test('Normal scenario', () => {
+        const converter = new Converter();
+        const inputsDir = 'dir1/dir2/inputs/'
+        const inputFile = 'dir1/dir2/inputs/test.side'
+        const expected = { expected: 'settings' }
+        const settings = { test: expected };
+        expect(converter['getSettingsByInput'](inputsDir, inputFile, settings)).toEqual(expected)
+    });
+
+    test('Relative path', () => {
+        const converter = new Converter();
+        const inputsDir = './dir1/dir2/inputs/'
+        const inputFile = './dir1/dir2/inputs/test.side'
+        const expected = { expected: 'settings' }
+        const settings = { test: expected };
+        expect(converter['getSettingsByInput'](inputsDir, inputFile, settings)).toEqual(expected)
+    });
+
+    test('When inputsDir and inputFile path different', () => {
+        const converter = new Converter();
+        const inputsDir = 'dir1/dir2/inputs/'
+        const inputFile = 'dir3/dir4/inputs/test.side'
+        const expected = { expected: 'settings' }
+        const settings = { dir3: { dir4: { inputs: { test: expected } } } };
+        expect(converter['getSettingsByInput'](inputsDir, inputFile, settings)).toEqual(expected)
+    });
+
+    test('When there is inputFile in current dir', () => {
+        const converter = new Converter();
+        const inputsDir = 'dir1/dir2/inputs/'
+        const inputFile = 'test.side'
+        const expected = { expected: 'settings' }
+        const settings = { test: expected };
+        expect(converter['getSettingsByInput'](inputsDir, inputFile, settings)).toEqual(expected)
+    });
+});

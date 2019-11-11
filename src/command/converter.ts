@@ -1,4 +1,5 @@
 
+import { Config } from 'src/command/init';
 import { File } from 'src/replace/file';
 import { Xpath } from 'src/replace/xpath';
 import { Text } from 'src/replace/text';
@@ -17,11 +18,11 @@ export class Converter {
     private replaceText: Function;
     private replaceXpath: Function;
 
-    public async init(input: string, config: object) {
-        const getSettings: (arg: object) => object = _.curry(this.getSettingsByInput)(_.get(config, 'inputsDir'), input);
-        const fileSettingFile = await util.readJson(_.get(config, 'fileSettingFile'));
-        const textSettingFile = await util.readJson(_.get(config, 'textSettingFile'));
-        const xpathSettingFile = await util.readJson(_.get(config, 'xpathSettingFile'));
+    public async init(input: string, config: Config) {
+        const getSettings: (arg: object) => object = _.curry(this.getSettingsByInput)(config.get('inputsDir'), input);
+        const fileSettingFile = await util.readJson(config.get('fileSettingFile'));
+        const textSettingFile = await util.readJson(config.get('textSettingFile'));
+        const xpathSettingFile = await util.readJson(config.get('xpathSettingFile'));
 
         this.input = await util.readJson(input);
         this.setReplaceFile(getSettings(fileSettingFile));
@@ -52,7 +53,6 @@ export class Converter {
 
     public save(output: string) {
         fs.writeFile(output, JSON.stringify(this.input, null, '    '))
-        console.log('outputs');
     }
 
     private execCommands(commands: object) {
