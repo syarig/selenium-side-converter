@@ -1,46 +1,60 @@
 
+import { SystemLogger } from 'src/logger/system_logger';
 import _ from 'lodash';
 import { Config } from 'src/command/init';
-import fs from 'fs';
-import { promises } from 'fs';
-import path from 'path';
+import { Converter } from 'src/command/converter';
+import { promises as fs } from 'fs';
+import { Walker } from 'src/command/walker';
+import * as path from 'path';
 
-interface Walker {
-    default(dirpath: string): void
-    catch(e: any): void
-}
+const EXT_NAME_SIDE = '.side';
 
-async function walk(dirpath: string, walker: Walker) {
-    let dirents: Array<fs.Dirent> = [];
-    try {
-        dirents = await promises.readdir(dirpath, { withFileTypes: true })
-
-    } catch (e) {
-        walker.default(e)
-    }
-
-    dirents.forEach((dirent: fs.Dirent) => {
-        const nextDirpath = path.join(dirpath, dirent.name);
-        if (dirent.isDirectory()) {
-            walk(nextDirpath, walker);
-
-        } else {
-            walker.default(nextDirpath);
-        }
-    });
-}
-
-export class Converter {
+export class Convert implements Walker {
     private config: Config
 
     constructor(config: Config) {
         this.config = config;
     }
 
-    private walkSideFile(sideFilesDir: string) {
+    public default(inputFile: string) {
+        this.execConverter(inputFile).then(() => {
+            SystemLogger.instance.info(`${inputFile} converting finish.`);
+        }).catch((e: any) => {
+            SystemLogger.instance.warn(e);
+        });
     }
 
-    public async exec() {
-        promises.readdir(this.config.get('inputsDir'), { withFileTypes: true })
+    public catch(e: any) { }
+
+    private async execConverter(inputFile: string) {
+        if (path.extname(inputFile) !== EXT_NAME_SIDE) {
+            throw `Skipped. ${inputFile} is not side extension.`;
+        }
+
+        const converter = await this.getConverter(inputFile)
+        converter.exec();
+        const outputFile = this.getOutputFile(inputFile);
+
+        fs.mkdir(path.dirname(outputFile), { recursive: true });
+        return converter.save(outputFile);
+    }
+
+    private getOutputFile(inputFile: string) {
+        const absoluteInputFile = path.resolve(inputFile);
+        let absoluteInputsDir = path.resolve(this.config.get('inputsDir'));
+        let relativeInputFile = absoluteInputFile
+            .replace(absoluteInputsDir + '/', '')
+
+        if (relativeInputFile === absoluteInputsDir) {
+            return '.';
+        }
+
+        return path.join(this.config.get('outputsDir'), relativeInputFile);
+    }
+
+    private async getConverter(inputFile: string) {
+        const converter = new Converter();
+        await converter.init(inputFile, this.config)
+        return converter;
     }
 }

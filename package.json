@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "exec": "ts-node --files -r tsconfig-paths/register",
-    "main": "npm run exec -- ./src/command/main.ts",
+    "main": "npm run exec -- ./src/main.ts",
     "test": "jest"
   },
   "keywords": [],
@@ -15,7 +15,8 @@
     "@types/lodash": "^4.14.146",
     "@types/node": "^12.12.7",
     "commander": "^4.0.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "log4js": "^6.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.22",

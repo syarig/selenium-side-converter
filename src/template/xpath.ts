@@ -1,8 +1,8 @@
 
 import _ from 'lodash';
-import path from 'path';
+import { Replaceable } from 'src/template/side';
 
-export class File {
+export class Xpath implements Replaceable {
     private fileSetting: object;
 
     constructor(fileSettingFile: object) {
@@ -14,10 +14,10 @@ export class File {
     }
 
     public convSetting(setting: string): string {
-        return path.resolve(setting);
+        return `xpath=${setting}`;
     }
 
     public getTemplate(key: string) {
-        return `\{file:${key}\}`;
+        return `\{xpath:${key}\}`;
     }
 }

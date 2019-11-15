@@ -10,7 +10,7 @@ export interface Command {
     value: string
 }
 
-export interface Replace {
+export interface Replaceable {
     convSetting(key: string): string
     getSettings(): object
     getTemplate(key: string): string

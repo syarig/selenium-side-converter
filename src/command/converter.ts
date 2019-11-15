@@ -1,9 +1,10 @@
 
+import { SystemLogger } from 'src/logger/system_logger';
 import { Config } from 'src/command/init';
-import { File } from 'src/replace/file';
-import { Xpath } from 'src/replace/xpath';
-import { Text } from 'src/replace/text';
-import { Replace, Command } from 'src/replace/side';
+import { File } from 'src/template/file';
+import { Xpath } from 'src/template/xpath';
+import { Text } from 'src/template/text';
+import { Command, Replaceable } from 'src/template/side';
 import { promises as fs } from 'fs';
 import * as util from 'src/util';
 import _ from 'lodash';
@@ -28,7 +29,7 @@ export class Converter {
         this.setReplaceFile(getSettings(fileSettingFile));
         this.setReplaceText(getSettings(textSettingFile));
         this.setReplaceXpath(getSettings(xpathSettingFile));
-        console.log(`ready for ${input} conversion.`);
+        SystemLogger.instance.info(`ready for ${input} conversion.`);
     }
 
     private setReplaceFile(setting: object) {
@@ -52,40 +53,36 @@ export class Converter {
     }
 
     public save(output: string) {
-        fs.writeFile(output, JSON.stringify(this.input, null, '    '))
+        fs.writeFile(output, JSON.stringify(this.input, null, '    '));
     }
 
     private execCommands(commands: object) {
-        _.forEach(commands, (command) => {
-            this.replaceCommand(command);
+        _.forEach(commands, (command: Command) => {
+            command.target = this.replaceXpath(command.target);
+            command.value = this.replaceXpath(command.value);
+
+            command.target = this.replaceFile(command.target);
+            command.value = this.replaceFile(command.value);
+
+            command.target = this.replaceText(command.target);
+            command.value = this.replaceText(command.value);
         });
     }
 
-    private replaceCommand(command: Command) {
-        command.target = this.replaceXpath(command.target);
-        command.value = this.replaceXpath(command.value);
-
-        command.target = this.replaceFile(command.target);
-        command.value = this.replaceFile(command.value);
-
-        command.target = this.replaceText(command.target);
-        command.value = this.replaceText(command.value);
-    }
-
-    private replace(replace: Replace) {
+    private replace(replaceable: Replaceable) {
         return (target: string): string => {
             if (!target) {
                 return target;
             }
 
             let replaced = target;
-            _.forEach(replace.getSettings(), (setting: string, key: string) => {
-                const template = replace.getTemplate(key);
+            _.forEach(replaceable.getSettings(), (setting: string, key: string) => {
+                const template = replaceable.getTemplate(key);
                 if (target.indexOf(template) === -1) {
                     return;
                 }
 
-                replaced = target.replace(new RegExp(template, 'g'), replace.convSetting(setting));
+                replaced = target.replace(new RegExp(template, 'g'), replaceable.convSetting(setting));
             })
             return replaced;
         }
@@ -95,10 +92,10 @@ export class Converter {
         const absoluteInputFile = path.resolve(inputFile);
         let absoluteInputsDir = path.resolve(inputsDir);
         if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
-          absoluteInputsDir = path.resolve('.');
+            absoluteInputsDir = path.resolve('.');
         }
         let settingPath = absoluteInputFile
-          .replace(absoluteInputsDir + '/', '')
+            .replace(absoluteInputsDir + '/', '')
 
         const basename = path.basename(inputFile, path.extname(inputFile));
         settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');

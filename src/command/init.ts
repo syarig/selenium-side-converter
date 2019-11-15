@@ -1,4 +1,5 @@
 
+import { SystemLogger } from 'src/logger/system_logger';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import _ from 'lodash';
@@ -60,7 +61,7 @@ export class Config {
     public get(key: string) {
         const value = _.get(this.config, key, '');
         if (value === '') {
-            console.log(`"${key}" config doesn't exists`);
+            SystemLogger.instance.warn(`"${key}" config doesn't exists`);
         }
         return value;
     }
