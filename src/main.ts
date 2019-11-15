@@ -1,5 +1,4 @@
 
-import { SystemLogger } from 'src/logger/system_logger';
 import { Create } from 'src/command/create';
 import { Converter } from 'src/command/converter';
 import { Walker } from 'src/command/walker';
