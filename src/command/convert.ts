@@ -41,13 +41,9 @@ export class Convert implements Walker {
 
     private getOutputFile(inputFile: string) {
         const absoluteInputFile = path.resolve(inputFile);
-        let absoluteInputsDir = path.resolve(this.config.get('inputsDir'));
-        let relativeInputFile = absoluteInputFile
-            .replace(absoluteInputsDir + '/', '')
-
-        if (relativeInputFile === absoluteInputsDir) {
-            return '.';
-        }
+        const absoluteInputsDir = path.resolve(this.config.get('inputsDir'));
+        const index = absoluteInputFile.indexOf(absoluteInputsDir);
+        const relativeInputFile = index === -1 ? inputFile : absoluteInputFile.slice(index + absoluteInputsDir.length);
 
         return path.join(this.config.get('outputsDir'), relativeInputFile);
     }
