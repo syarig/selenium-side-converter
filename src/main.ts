@@ -1,37 +1,13 @@
 
 import { Create } from 'src/command/create';
 import { Converter } from 'src/command/converter';
-import { Walker } from 'src/command/walker';
 import { Init, configFile, Config } from 'src/command/init';
-import fs from 'fs';
-import { promises } from 'fs';
-import path from 'path';
 import { Command } from 'commander';
 import _ from 'lodash';
 import { Convert } from 'src/command/convert';
+import { walk } from 'src/walk';
 const program = new Command();
 
-
-async function walk(dirpath: string, walker: Walker) {
-    let dirents: Array<fs.Dirent> = [];
-    try {
-        dirents = await promises.readdir(dirpath, { withFileTypes: true })
-
-    } catch (e) {
-        walker.catch(e)
-        return;
-    }
-
-    dirents.forEach((dirent: fs.Dirent) => {
-        const nextDirpath = path.join(dirpath, dirent.name);
-        if (dirent.isDirectory()) {
-            walk(nextDirpath, walker);
-
-        } else {
-            walker.default(nextDirpath);
-        }
-    });
-}
 
 async function exec(args: object = {}) {
     const converter = new Converter();
