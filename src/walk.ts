@@ -22,8 +22,6 @@ export async function walk(dirpath: string, walker: Walker): Promise<void> {
             walk(nextDirpath, walker);
 
         } else {
-            console.log('walker.default(nextDirpath)');
-            
             walker.default(nextDirpath);
         }
     });

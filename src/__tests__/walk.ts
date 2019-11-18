@@ -40,4 +40,31 @@ describe('walk', () => {
         };
         walk('entry', mockWalker);
     });
+
+    test('Exception scenario', () => {
+
+        const expectedError = 'expectedError';
+
+        walk.promises = {
+            readdir: jest.fn()
+                .mockImplementationOnce(() => {
+                    return new Promise((resolve, reject) => {
+                        reject(expectedError);
+                    });
+                })
+                .mockImplementation(() => {
+                    return new Promise((resolve) => {
+                        resolve([]);
+                    });
+                })
+        } as any;
+
+        const mockWalker = {
+            catch: jest.fn().mockImplementation((e: any) => {
+                expect(e).toBe(expectedError);
+            }),
+            default: jest.fn()
+        };
+        walk('entry', mockWalker);
+    });
 });
