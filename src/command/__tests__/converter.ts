@@ -1,11 +1,11 @@
 
-import { Xpath } from 'src/template/xpath';
-import { Text } from 'src/template/text';
-import { Converter } from 'src/command/converter';
+import { Xpath } from '@/template/xpath';
+import { Text } from '@/template/text';
+import { Converter } from '@/command/converter';
 import { mocked } from 'ts-jest/utils';
 
-jest.mock('src/template/xpath');
-jest.mock('src/template/text');
+jest.mock('template/xpath');
+jest.mock('template/text');
 
 describe('replace', () => {
   beforeEach(() => {

@@ -1,10 +1,10 @@
 
 
 import { promises as fs } from 'fs';
-import { join } from 'path';
-import * as init from 'src/command/init';
+import * as path from 'path';
+import * as init from '@/command/init';
 import _ from 'lodash';
-
+import { walk } from '@/walk';
 
 
 export class Create {
@@ -14,24 +14,27 @@ export class Create {
         this.appPath = appPath;
     }
 
-    public exec() {
-        init.makeDirs.forEach((dir) => { this.mkdir(dir) });
-        this.createSettings();
+    public async exec() {
+        await Promise.all(init.makeDirs.map((dir) => { this.mkdir(dir) }));
+        await this.createSettings();
+        const initInstance = new init.Init(this.appPath);
+        initInstance.exec();
     }
 
     private async createSettings() {
         await this.mkdir(init.defaultSettingsDir)
-        init.settingFiles.forEach((file) => { this.touch(join(init.defaultSettingsDir, file)) });
+        init.settingFiles.forEach((file) => { this.touch(file) });
     }
 
     private mkdir(dir: string) {
-        const path = join(this.appPath, dir);
-        return fs.mkdir(path, { recursive: true });
+        const dirpath = path.join(this.appPath, dir);
+        return fs.mkdir(dirpath, { recursive: true });
     }
 
     private async touch(file: string) {
-        file = join(this.appPath, file);
-        const handler: fs.FileHandle = await fs.open(file, 'w')
-        handler.close();
+        file = path.join(this.appPath, init.defaultSettingsDir, file);
+        const handler: fs.FileHandle = await fs.open(path.resolve(file), 'w')
+        
+        return handler.close();
     }
 }

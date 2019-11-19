@@ -1,5 +1,5 @@
 
-import { Base } from 'src/logger/base'
+import { Base } from '@/logger/base';
 
 export class SystemLogger extends Base {
     public static get instance(): SystemLogger {

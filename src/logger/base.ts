@@ -1,5 +1,5 @@
 
-import log4js from 'log4js';
+import { Logger, getLogger } from 'log4js';
 
 interface Loggable {
     log(message: string): void
@@ -7,11 +7,11 @@ interface Loggable {
 
 export class Base implements Loggable {
     protected static _instance: any;
-    protected logger: log4js.Logger;
+    protected logger: Logger;
 
     protected constructor(name: string) {
-        this.logger = log4js.getLogger(name);
-        this.logger.level = 'warn';
+        this.logger = getLogger(name);
+        this.logger.level = 'info';
     }
 
     public log(message: string) {

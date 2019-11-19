@@ -1,5 +1,5 @@
 
-import { walk } from 'src/walk';
+import { walk } from '@/walk';
 import { Dirent } from 'fs';
 
 describe('walk', () => {

@@ -1,9 +1,9 @@
 
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from '@/logger/system_logger';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import _ from 'lodash';
-import * as util from 'src/util';
+import * as util from '@/util';
 
 export const [
     defaultSettingsDir,
@@ -43,8 +43,17 @@ const deafultConfig = {
 }
 
 export class Init {
+    private appPath: string
+
+    constructor(appPath: string) {
+        this.appPath = appPath;
+    }
+
     public exec() {
-        fs.writeFile(configFile, JSON.stringify(deafultConfig, null, '    '))
+        fs.writeFile(
+            join(this.appPath, configFile),
+            JSON.stringify(deafultConfig, null, '    ')
+        );
     }
 }
 

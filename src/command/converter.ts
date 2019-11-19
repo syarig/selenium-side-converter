@@ -1,12 +1,12 @@
 
-import { SystemLogger } from 'src/logger/system_logger';
-import { Config } from 'src/command/init';
-import { File } from 'src/template/file';
-import { Xpath } from 'src/template/xpath';
-import { Text } from 'src/template/text';
-import { Command, Replaceable } from 'src/template/side';
+import { SystemLogger } from '@/logger/system_logger';
+import { Config } from '@/command/init';
+import { File } from '@/template/file';
+import { Xpath } from '@/template/xpath';
+import { Text } from '@/template/text';
+import { Command, Replaceable } from '@/template/side';
 import { promises as fs } from 'fs';
-import * as util from 'src/util';
+import * as util from '@/util';
 import _ from 'lodash';
 import * as path from 'path';
 
@@ -15,6 +15,7 @@ const keyCommands = 'commands';
 
 export class Converter {
     private input: object;
+    private inputFile: string;
     private replaceFile: Function;
     private replaceText: Function;
     private replaceXpath: Function;
@@ -25,6 +26,7 @@ export class Converter {
         const textSettingFile = await util.readJson(config.get('textSettingFile'));
         const xpathSettingFile = await util.readJson(config.get('xpathSettingFile'));
 
+        this.inputFile = input;
         this.input = await util.readJson(input);
         this.setReplaceFile(getSettings(fileSettingFile));
         this.setReplaceText(getSettings(textSettingFile));
@@ -50,6 +52,7 @@ export class Converter {
             const commands = _.get(test, keyCommands, [])
             this.execCommands(commands);
         });
+        SystemLogger.instance.info(`${this.inputFile} converting finish.`);
     }
 
     public save(output: string) {

@@ -17,6 +17,7 @@
         "node": true
     },
     "rules": {
+        "no-var-requires": false,
         "quotes": [
             1,
             "single",

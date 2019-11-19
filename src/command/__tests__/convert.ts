@@ -2,7 +2,7 @@ import { Config } from "src/command/init";
 import { Convert } from "src/command/convert";
 import { mocked } from "ts-jest/utils";
 
-jest.mock('src/command/init');
+jest.mock('command/init');
 
 describe('getOutputFile', () => {
     beforeEach(() => {

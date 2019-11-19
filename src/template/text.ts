@@ -1,6 +1,6 @@
 
 import _ from 'lodash';
-import { Replaceable } from 'src/template/side';
+import { Replaceable } from '@/template/side';
 
 export class Text implements Replaceable {
     private fileSetting: object;

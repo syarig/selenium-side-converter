@@ -1,9 +1,9 @@
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from '@/logger/system_logger';
 import _ from 'lodash';
-import { Config } from 'src/command/init';
-import { Converter } from 'src/command/converter';
+import { Config } from '@/command/init';
+import { Converter } from '@/command/converter';
 import { promises as fs } from 'fs';
-import { Walker } from 'src/command/walker';
+import { Walker } from '@/command/walker';
 import * as path from 'path';
 
 const EXT_NAME_SIDE = '.side';
@@ -16,9 +16,7 @@ export class Convert implements Walker {
   }
 
   public default(inputFile: string): void {
-    this.execConverter(inputFile).then(() => {
-      SystemLogger.instance.info(`${inputFile} converting finish.`);
-    }).catch((e: any) => {
+    this.execConverter(inputFile).catch((e: any) => {
       SystemLogger.instance.warn(e);
     });
   }

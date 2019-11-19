@@ -2,9 +2,16 @@
   "name": "selenium-side-converter",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
+  "bin": {
+    "selenium-side-converter": "./bin/selenium-side-converter.js"
+  },
   "scripts": {
     "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "build": "webpack",
+    "prepare": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.dev.js --watch",
     "exec": "ts-node --files -r tsconfig-paths/register",
     "main": "npm run exec -- ./src/main.ts",
     "test": "jest"
@@ -27,10 +34,11 @@
     "eslint": "^6.6.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
-    "ts-node": "^8.5.2",
+    "ts-loader": "^6.2.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^4.2.2"
   }
 }
