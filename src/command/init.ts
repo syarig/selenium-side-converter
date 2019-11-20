@@ -1,7 +1,7 @@
 
 import { SystemLogger } from '@/logger/system_logger';
 import { promises as fs } from 'fs';
-import { join } from 'path';
+import * as path from 'path';
 import _ from 'lodash';
 import * as util from '@/util';
 
@@ -37,9 +37,9 @@ const deafultConfig = {
     inputsDir: defaultInputsDir,
     outputsDir: defaultOutputsDir,
     filesDir: defaultFilesDir,
-    xpathSettingFile: join(defaultSettingsDir, defaultXpathSettingFile),
-    fileSettingFile: join(defaultSettingsDir, defaultFileSettingFile),
-    textSettingFile: join(defaultSettingsDir, defaultTextSettingFile)
+    xpathSettingFile: path.join(defaultSettingsDir, defaultXpathSettingFile),
+    fileSettingFile: path.join(defaultSettingsDir, defaultFileSettingFile),
+    textSettingFile: path.join(defaultSettingsDir, defaultTextSettingFile)
 }
 
 export class Init {
@@ -51,9 +51,45 @@ export class Init {
 
     public exec() {
         fs.writeFile(
-            join(this.appPath, configFile),
+            path.join(this.appPath, configFile),
             JSON.stringify(deafultConfig, null, '    ')
         );
+    }
+}
+
+export class Setting {
+    private setting: object;
+    private settingPath: string;
+    private inputsDir: string;
+
+    public async init(config: Config) {
+        this.inputsDir = config.get('inputsDir');
+        this.setting = {
+            fileSetting: await util.readJson(config.get('fileSettingFile')),
+            textSetting: await util.readJson(config.get('textSettingFile')),
+            xpathSetting: await util.readJson(config.get('xpathSettingFile')),
+        }
+    }
+
+    public setSettingPath(inputFile: string) {
+        const absoluteInputFile = path.resolve(inputFile);
+        let absoluteInputsDir = path.resolve(this.inputsDir);
+        if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
+            absoluteInputsDir = path.resolve('.');
+        }
+        let settingPath = absoluteInputFile
+            .replace(absoluteInputsDir + '/', '')
+
+        const basename = path.basename(inputFile, path.extname(inputFile));
+        this.settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
+    }
+
+    public get(key: string) {
+        const setting = _.get(this.setting, key + '.' + this.settingPath, {});
+        if (!setting) {
+            SystemLogger.instance.error(`"${key}" setting doesn't exists`);
+        }
+        return setting;
     }
 }
 
@@ -70,8 +106,16 @@ export class Config {
     public get(key: string) {
         const value = _.get(this.config, key, '');
         if (value === '') {
-            SystemLogger.instance.warn(`"${key}" config doesn't exists`);
+            SystemLogger.instance.error(`"${key}" config doesn't exists`);
         }
         return value;
+    }
+
+    public getOutputFile(inputFile: string) {
+        const absoluteInputFile = path.resolve(inputFile);
+        const absoluteInputsDir = path.resolve(this.get('inputsDir'));
+        const index = absoluteInputFile.indexOf(absoluteInputsDir);
+        const relativeInputFile = index === -1 ? inputFile : absoluteInputFile.slice(index + absoluteInputsDir.length);
+        return path.join(this.get('outputsDir'), relativeInputFile);
     }
 }

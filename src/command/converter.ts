@@ -1,5 +1,5 @@
 
-import { Config } from '@/command/init';
+import { Setting } from '@/command/init';
 import { File } from '@/template/file';
 import { Xpath } from '@/template/xpath';
 import { Text } from '@/template/text';
@@ -7,29 +7,22 @@ import { Command, Replaceable } from '@/template/side';
 import { promises as fs } from 'fs';
 import * as util from '@/util';
 import _ from 'lodash';
-import * as path from 'path';
 
 const keyTests = 'tests';
 const keyCommands = 'commands';
 
 export class Converter {
     private input: object;
-    private inputFile: string;
     private replaceFile: Function;
     private replaceText: Function;
     private replaceXpath: Function;
 
-    public async init(input: string, config: Config) {
-        const getSettings: (arg: object) => object = _.curry(this.getSettingsByInput)(config.get('inputsDir'), input);
-        const fileSettingFile = await util.readJson(config.get('fileSettingFile'));
-        const textSettingFile = await util.readJson(config.get('textSettingFile'));
-        const xpathSettingFile = await util.readJson(config.get('xpathSettingFile'));
-
-        this.inputFile = input;
-        this.input = await util.readJson(input);
-        this.setReplaceFile(getSettings(fileSettingFile));
-        this.setReplaceText(getSettings(textSettingFile));
-        this.setReplaceXpath(getSettings(xpathSettingFile));
+    public async init(inputFile: string, setting: Setting) {
+        setting.setSettingPath(inputFile);
+        this.input = await util.readJson(inputFile);
+        this.setReplaceFile(setting.get('fileSetting'));
+        this.setReplaceText(setting.get('textSetting'));
+        this.setReplaceXpath(setting.get('xpathSetting'));
     }
 
     private setReplaceFile(setting: object) {
@@ -85,20 +78,5 @@ export class Converter {
             })
             return replaced;
         }
-    }
-
-    private getSettingsByInput(inputsDir: string, inputFile: string, settings: object) {
-        const absoluteInputFile = path.resolve(inputFile);
-        let absoluteInputsDir = path.resolve(inputsDir);
-        if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
-            absoluteInputsDir = path.resolve('.');
-        }
-        let settingPath = absoluteInputFile
-            .replace(absoluteInputsDir + '/', '')
-
-        const basename = path.basename(inputFile, path.extname(inputFile));
-        settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
-
-        return _.get(settings, settingPath, {});
     }
 }

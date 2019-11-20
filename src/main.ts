@@ -2,7 +2,7 @@
 import { SystemLogger } from '@/logger/system_logger';
 import { Create } from '@/command/create';
 import { Converter } from '@/command/converter';
-import { Init, configFile, Config } from '@/command/init';
+import { Init, configFile, Config, Setting } from '@/command/init';
 import { Command } from 'commander';
 import _ from 'lodash';
 import { Convert } from '@/command/convert';
@@ -16,20 +16,30 @@ async function getConfig(args: object = {}) {
     return config;
 }
 
+async function getSetting(config: Config) {
+    const setting = new Setting();
+    setting.init(config);
+    return setting;
+}
+
 function convertAll(config: Config) {
-    SystemLogger.instance.info('Ready for conversion.');
-    const convert = new Convert(config);
-    walk(config.get('inputsDir'), convert);
-    SystemLogger.instance.info('Finish converting all.');
+    getSetting(config).then((setting) => {
+        SystemLogger.instance.info('Ready for conversion.');
+        const convert = new Convert(config, setting);
+        walk(config.get('inputsDir'), convert);
+        SystemLogger.instance.info('Finish converting all.');
+    });
 }
 
 function convert(config: Config, input: string, output: string) {
-    const converter = new Converter();
-    converter.init(input, config).then(() => {
-        SystemLogger.instance.info(`Ready for ${input} conversion.`);
-        converter.exec()
-        converter.save(output);
-        SystemLogger.instance.info(`${input} converting finish.`);
+    getSetting(config).then((setting) => {
+        const converter = new Converter();
+        converter.init(input, setting).then(() => {
+            SystemLogger.instance.info(`Ready for ${input} conversion.`);
+            converter.exec()
+            converter.save(output);
+            SystemLogger.instance.info(`${input} converting finish.`);
+        });
     });
 }
 
@@ -43,7 +53,7 @@ program.command('convert').alias('c')
     .action((opts) => {
         if (opts.all) {
             getConfig().then((config) => {
-                convertAll(config)
+                convertAll(config);
             });
             return;
         }
