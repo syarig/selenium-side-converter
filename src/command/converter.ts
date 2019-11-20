@@ -59,12 +59,11 @@ export class Converter {
     private execCommands(commands: object) {
         _.forEach(commands, (command: Command) => {
             command.target = this.replaceXpath(command.target);
-            command.value = this.replaceXpath(command.value);
-
             command.target = this.replaceFile(command.target);
-            command.value = this.replaceFile(command.value);
-
             command.target = this.replaceText(command.target);
+
+            command.value = this.replaceFile(command.value);
+            command.value = this.replaceXpath(command.value);
             command.value = this.replaceText(command.value);
         });
     }
