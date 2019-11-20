@@ -1,5 +1,4 @@
 
-import { SystemLogger } from '@/logger/system_logger';
 import { Config } from '@/command/init';
 import { File } from '@/template/file';
 import { Xpath } from '@/template/xpath';
@@ -31,7 +30,6 @@ export class Converter {
         this.setReplaceFile(getSettings(fileSettingFile));
         this.setReplaceText(getSettings(textSettingFile));
         this.setReplaceXpath(getSettings(xpathSettingFile));
-        SystemLogger.instance.info(`ready for ${input} conversion.`);
     }
 
     private setReplaceFile(setting: object) {
@@ -52,7 +50,6 @@ export class Converter {
             const commands = _.get(test, keyCommands, [])
             this.execCommands(commands);
         });
-        SystemLogger.instance.info(`${this.inputFile} converting finish.`);
     }
 
     public save(output: string) {

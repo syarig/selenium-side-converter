@@ -1,4 +1,5 @@
 
+import { SystemLogger } from '@/logger/system_logger';
 import { Create } from '@/command/create';
 import { Converter } from '@/command/converter';
 import { Init, configFile, Config } from '@/command/init';
@@ -9,31 +10,26 @@ import { walk } from '@/walk';
 
 const program = new Command();
 
-async function exec(args: object = {}) {
-}
-
 async function getConfig(args: object = {}) {
     const config = new Config();
     await config.init(args);
     return config;
 }
 
-function convertAll() {
-    getConfig().then((config) => {
-        const convert = new Convert(config);
-        walk(config.get('inputsDir'), convert);
-    });
+function convertAll(config: Config) {
+    SystemLogger.instance.info('Ready for conversion.');
+    const convert = new Convert(config);
+    walk(config.get('inputsDir'), convert);
+    SystemLogger.instance.info('Finish converting all.');
 }
 
-function convert(input: string, output: string) {
-    getConfig({ inputsDir: '.' }).then((config) => {
-        const converter = new Converter();
-        converter.init(input, config)
-        return converter
-
-    }).then((converter) => {
+function convert(config: Config, input: string, output: string) {
+    const converter = new Converter();
+    converter.init(input, config).then(() => {
+        SystemLogger.instance.info(`Ready for ${input} conversion.`);
         converter.exec()
         converter.save(output);
+        SystemLogger.instance.info(`${input} converting finish.`);
     });
 }
 
@@ -46,14 +42,21 @@ program.command('convert').alias('c')
     .option('-o, --output <file>', 'Output file converted and merged input side file.', './output.side')
     .action((opts) => {
         if (opts.all) {
-            convertAll();
+            getConfig().then((config) => {
+                convertAll(config)
+            });
             return;
         }
 
         if (opts.input !== undefined) {
-            convert(opts.input, opts.output);
+            getConfig({ inputsDir: '.' }).then((config) => {
+                convert(config, opts.input, opts.output);
+            });
             return;
         }
+
+        console.error('Wrong usage. Require option of -i or --all');
+        process.exit(1);
     });
 
 program.command('create [appPath]')
@@ -70,4 +73,16 @@ program.command('init [appPath]')
         init.exec();
     });
 
+program.command('*')
+    .action(() => {
+        console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+        process.exit(1);
+    });
+
 program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+    program.help((str: string): string => {
+        return str.replace('*\n', '');
+    });
+}
