@@ -2,9 +2,9 @@
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import * as init from '@/command/init';
+import * as init from 'src/command/init';
 import _ from 'lodash';
-import { walk } from '@/walk';
+import { walk } from 'src/walk';
 
 
 export class Create {

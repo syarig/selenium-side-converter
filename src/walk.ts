@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Walker } from '@/command/walker';
+import { Walker } from 'src/command/walker';
 import { promises } from 'fs';
 import path from 'path';
 

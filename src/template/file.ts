@@ -1,7 +1,7 @@
 
 import _ from 'lodash';
 import path from 'path';
-import { Replaceable } from '@/template/side';
+import { Replaceable } from 'src/template/side';
 
 export class File implements Replaceable {
     private fileSetting: object;

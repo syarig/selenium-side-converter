@@ -1,9 +1,9 @@
 
-import { SystemLogger } from '@/logger/system_logger';
+import { SystemLogger } from 'src/logger/system_logger';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import _ from 'lodash';
-import * as util from '@/util';
+import * as util from 'src/util';
 
 export const [
     defaultSettingsDir,

@@ -1,7 +1,7 @@
 
 import { promises as fs } from 'fs';
 import _ from 'lodash';
-import { SystemLogger } from '@/logger/system_logger';
+import { SystemLogger } from 'src/logger/system_logger';
 
 export async function readJson(input: string) {
     let content = {};

@@ -1,9 +1,9 @@
-import { SystemLogger } from '@/logger/system_logger';
+import { SystemLogger } from 'src/logger/system_logger';
 import _ from 'lodash';
-import { Setting, Config } from '@/command/init';
-import { Converter } from '@/command/converter';
+import { Setting, Config } from 'src/command/init';
+import { Converter } from 'src/command/converter';
 import { promises as fs } from 'fs';
-import { Walker } from '@/command/walker';
+import { Walker } from 'src/command/walker';
 import * as path from 'path';
 
 const EXT_NAME_SIDE = '.side';

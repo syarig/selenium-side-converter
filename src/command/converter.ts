@@ -1,11 +1,11 @@
 
-import { Setting } from '@/command/init';
-import { File } from '@/template/file';
-import { Xpath } from '@/template/xpath';
-import { Text } from '@/template/text';
-import { Command, Replaceable } from '@/template/side';
+import { Setting } from 'src/command/init';
+import { File } from 'src/template/file';
+import { Xpath } from 'src/template/xpath';
+import { Text } from 'src/template/text';
+import { Command, Replaceable } from 'src/template/side';
 import { promises as fs } from 'fs';
-import * as util from '@/util';
+import * as util from 'src/util';
 import _ from 'lodash';
 
 const keyTests = 'tests';

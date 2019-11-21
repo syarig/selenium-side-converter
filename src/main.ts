@@ -1,12 +1,12 @@
 
-import { SystemLogger } from '@/logger/system_logger';
-import { Create } from '@/command/create';
-import { Converter } from '@/command/converter';
-import { Init, configFile, Config, Setting } from '@/command/init';
+import { SystemLogger } from 'src/logger/system_logger';
+import { Create } from 'src/command/create';
+import { Converter } from 'src/command/converter';
+import { Init, configFile, Config, Setting } from 'src/command/init';
 import { Command } from 'commander';
 import _ from 'lodash';
-import { Convert } from '@/command/convert';
-import { walk } from '@/walk';
+import { Convert } from 'src/command/convert';
+import { walk } from 'src/walk';
 
 const program = new Command();
 

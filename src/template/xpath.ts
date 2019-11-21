@@ -1,6 +1,6 @@
 
 import _ from 'lodash';
-import { Replaceable } from '@/template/side';
+import { Replaceable } from 'src/template/side';
 
 export class Xpath implements Replaceable {
     private fileSetting: object;
