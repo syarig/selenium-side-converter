@@ -12,8 +12,6 @@
     "build": "webpack",
     "prepare": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.dev.js --watch",
-    "exec": "ts-node --files -r tsconfig-paths/register",
-    "main": "npm run exec -- ./src/main.ts",
     "test": "jest"
   },
   "keywords": [],
