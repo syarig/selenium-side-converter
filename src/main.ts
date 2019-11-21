@@ -74,6 +74,7 @@ program.command('create [appPath]')
     .action((appPath: string = './') => {
         const create = new Create(appPath);
         create.exec();
+        SystemLogger.instance.info(`Created ${appPath} project.`);
     });
 
 program.command('init [appPath]')
