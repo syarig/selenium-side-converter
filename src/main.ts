@@ -1,10 +1,12 @@
 
 import { SystemLogger } from 'src/logger/system_logger';
 import { Create } from 'src/command/create';
+import { Merge } from 'src/command/merge';
 import { Converter } from 'src/command/converter';
 import { Init, configFile, Config, Setting } from 'src/command/init';
 import { Command } from 'commander';
 import _ from 'lodash';
+import * as path from 'path';
 import { Convert } from 'src/command/convert';
 import { walk } from 'src/walk';
 
@@ -47,7 +49,7 @@ program.version('0.0.1', '-v, --version')
     .description('Convert selenium side file. Please enter side file.')
 
 program.command('convert').alias('c')
-    .option('--all', 'convert all side files')
+    .option('--all', 'convert all side files', false)
     .option('-i, --input <file>', 'Input file converted and merged input side file.')
     .option('-o, --output <file>', 'Output file converted and merged input side file.', './output.side')
     .action((opts) => {
@@ -66,7 +68,28 @@ program.command('convert').alias('c')
         }
 
         console.error('Wrong usage. Require option of -i or --all');
-        process.exit(1);
+    });
+
+program.command('merge <files...>')
+    .description('Create app template. Please enter app path')
+    .option('-n, --name [name]')
+    .option('--suites', 'Only merge suites', false)
+    .option('--tests', 'Only merge tests', false)
+    .action((files: Array<string>, opts) => {
+        let isValid = true;
+        getConfig().then((config) => {
+            isValid = files.every((file: string) => {
+                if (!config.isSideFileExtname(file)) {
+                    SystemLogger.instance.error(`Invalid extention file included that selected merge ${file}.`);
+                    return false;
+                }
+            });
+        });
+        if (!isValid) return;
+
+        const merge = new Merge(opts.suites, opts.tests);
+        merge.exec(opts.name, files);
+        SystemLogger.instance.info(`Merged side files ${files.join(',')}`);
     });
 
 program.command('create [appPath]')
@@ -87,7 +110,6 @@ program.command('init [appPath]')
 program.command('*')
     .action(() => {
         console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
-        process.exit(1);
     });
 
 program.parse(process.argv);

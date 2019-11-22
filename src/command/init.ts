@@ -32,8 +32,10 @@ export const settingFiles = [
 ];
 
 export const configFile = 'ssconfig.json';
+const defaultSideFileExtname = '.side';
 
 const deafultConfig = {
+    sideFileExtname: defaultSideFileExtname,
     inputsDir: defaultInputsDir,
     outputsDir: defaultOutputsDir,
     filesDir: defaultFilesDir,
@@ -101,6 +103,10 @@ export class Config {
         let config = await util.readJson(configFile)
         Object.assign(this.config, config);
         Object.assign(this.config, args);
+    }
+
+    public isSideFileExtname(file: string) {
+        return path.extname(file) === this.get('sideFileExtname');
     }
 
     public get(key: string) {

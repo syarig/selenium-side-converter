@@ -9,8 +9,8 @@ import * as path from 'path';
 const EXT_NAME_SIDE = '.side';
 
 export class Convert implements Walker {
-  private config: Config
-  private setting: Setting
+  private config: Config;
+  private setting: Setting;
 
   constructor(config: Config, setting: Setting) {
     this.config = config;
@@ -26,7 +26,7 @@ export class Convert implements Walker {
   public catch(e: any): void { /** pass */ }
 
   private async execConverter(inputFile: string): Promise<void> {
-    if (path.extname(inputFile) !== EXT_NAME_SIDE) {
+    if (this.config.isSideFileExtname(inputFile)) {
       throw `Skipped. ${inputFile} is not side extension.`;
     }
 
