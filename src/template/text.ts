@@ -1,5 +1,4 @@
 
-import _ from 'lodash';
 import { Replaceable } from 'src/template/side';
 
 export class Text implements Replaceable {
@@ -9,15 +8,15 @@ export class Text implements Replaceable {
         this.fileSetting = fileSettingFile;
     }
 
-    public getSettings() {
+    public getSettings(): object {
         return this.fileSetting;
     }
 
-    public convSetting(setting: string) {
+    public convSetting(setting: string): string {
         return setting; 
     }
 
-    public getTemplate(key: string) {
-        return `\{file:${key}\}`;
+    public getTemplate(key: string): string {
+        return `{file:${key}}`;
     }
 }

@@ -1,12 +1,10 @@
 import { SystemLogger } from 'src/logger/system_logger';
-import _ from 'lodash';
 import { Setting, Config } from 'src/command/init';
 import { Converter } from 'src/command/converter';
 import { promises as fs } from 'fs';
 import { Walker } from 'src/command/walker';
 import * as path from 'path';
 
-const EXT_NAME_SIDE = '.side';
 
 export class Convert implements Walker {
   private config: Config;
@@ -23,7 +21,9 @@ export class Convert implements Walker {
     });
   }
 
-  public catch(e: any): void { /** pass */ }
+  public catch(e: any): void {
+    SystemLogger.instance.error(e.message);
+  }
 
   private async execConverter(inputFile: string): Promise<void> {
     if (this.config.isSideFileExtname(inputFile)) {

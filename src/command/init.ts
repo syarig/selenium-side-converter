@@ -9,7 +9,7 @@ export const [
     defaultSettingsDir,
     defaultInputsDir,
     defaultOutputsDir,
-    defaultFilesDir,
+    defaultFilesDir
 ] = ['settings', 'inputs', 'outputs', 'files'];
 
 export const makeDirs = [
@@ -42,7 +42,7 @@ const deafultConfig = {
     xpathSettingFile: path.join(defaultSettingsDir, defaultXpathSettingFile),
     fileSettingFile: path.join(defaultSettingsDir, defaultFileSettingFile),
     textSettingFile: path.join(defaultSettingsDir, defaultTextSettingFile)
-}
+};
 
 export class Init {
     private appPath: string
@@ -51,7 +51,7 @@ export class Init {
         this.appPath = appPath;
     }
 
-    public exec() {
+    public exec(): void {
         fs.writeFile(
             path.join(this.appPath, configFile),
             JSON.stringify(deafultConfig, null, '    ')
@@ -64,29 +64,29 @@ export class Setting {
     private settingPath: string;
     private inputsDir: string;
 
-    public async init(config: Config) {
+    public async init(config: Config): Promise<void> {
         this.inputsDir = config.get('inputsDir');
         this.setting = {
             fileSetting: await util.readJson(config.get('fileSettingFile')),
             textSetting: await util.readJson(config.get('textSettingFile')),
-            xpathSetting: await util.readJson(config.get('xpathSettingFile')),
-        }
+            xpathSetting: await util.readJson(config.get('xpathSettingFile'))
+        };
     }
 
-    public setSettingPath(inputFile: string) {
+    public setSettingPath(inputFile: string): void {
         const absoluteInputFile = path.resolve(inputFile);
         let absoluteInputsDir = path.resolve(this.inputsDir);
         if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
             absoluteInputsDir = path.resolve('.');
         }
-        let settingPath = absoluteInputFile
-            .replace(absoluteInputsDir + '/', '')
+        const settingPath = absoluteInputFile
+            .replace(absoluteInputsDir + '/', '');
 
         const basename = path.basename(inputFile, path.extname(inputFile));
         this.settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
     }
 
-    public get(key: string) {
+    public get(key: string): object {
         const setting = _.get(this.setting, key + '.' + this.settingPath, {});
         if (!setting) {
             SystemLogger.instance.error(`"${key}" setting doesn't exists`);
@@ -98,18 +98,18 @@ export class Setting {
 export class Config {
     private config: object;
 
-    public async init(args: object = {}) {
+    public async init(args: object = {}): Promise<void> {
         this.config = deafultConfig;
-        let config = await util.readJson(configFile)
+        const config = await util.readJson(configFile);
         Object.assign(this.config, config);
         Object.assign(this.config, args);
     }
 
-    public isSideFileExtname(file: string) {
+    public isSideFileExtname(file: string): boolean {
         return path.extname(file) === this.get('sideFileExtname');
     }
 
-    public get(key: string) {
+    public get(key: string): string {
         const value = _.get(this.config, key, '');
         if (value === '') {
             SystemLogger.instance.error(`"${key}" config doesn't exists`);
@@ -117,7 +117,7 @@ export class Config {
         return value;
     }
 
-    public getOutputFile(inputFile: string) {
+    public getOutputFile(inputFile: string): string {
         const absoluteInputFile = path.resolve(inputFile);
         const absoluteInputsDir = path.resolve(this.get('inputsDir'));
         const index = absoluteInputFile.indexOf(absoluteInputsDir);

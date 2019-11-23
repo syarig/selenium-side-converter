@@ -1,5 +1,4 @@
 
-import _ from 'lodash';
 import { Replaceable } from 'src/template/side';
 
 export class Xpath implements Replaceable {
@@ -9,7 +8,7 @@ export class Xpath implements Replaceable {
         this.fileSetting = fileSettingFile;
     }
 
-    public getSettings() {
+    public getSettings(): object {
         return this.fileSetting;
     }
 
@@ -17,7 +16,7 @@ export class Xpath implements Replaceable {
         return `xpath=${setting}`;
     }
 
-    public getTemplate(key: string) {
-        return `\{xpath:${key}\}`;
+    public getTemplate(key: string): string {
+        return `{xpath:${key}}`;
     }
 }

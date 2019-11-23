@@ -5,26 +5,24 @@ import { Merge } from 'src/command/merge';
 import { Converter } from 'src/command/converter';
 import { Init, configFile, Config, Setting } from 'src/command/init';
 import { Command } from 'commander';
-import _ from 'lodash';
-import * as path from 'path';
 import { Convert } from 'src/command/convert';
 import { walk } from 'src/walk';
 
 const program = new Command();
 
-async function getConfig(args: object = {}) {
+async function getConfig(args: object = {}): Promise<Config> {
     const config = new Config();
     await config.init(args);
     return config;
 }
 
-async function getSetting(config: Config) {
+async function getSetting(config: Config): Promise<Setting> {
     const setting = new Setting();
     setting.init(config);
     return setting;
 }
 
-function convertAll(config: Config) {
+function convertAll(config: Config): void {
     getSetting(config).then((setting) => {
         SystemLogger.instance.info('Ready for conversion.');
         const convert = new Convert(config, setting);
@@ -33,7 +31,7 @@ function convertAll(config: Config) {
     });
 }
 
-function convert(config: Config, input: string, output: string) {
+function convert(config: Config, input: string, output: string): void {
     getSetting(config).then((setting) => {
         const converter = new Converter();
         converter.init(input, setting).then(() => {
@@ -51,7 +49,7 @@ program.version('0.0.1', '-v, --version')
 program.command('convert').alias('c')
     .option('--all', 'convert all side files', false)
     .option('-i, --input <file>', 'Input file converted and merged input side file.')
-    .option('-o, --output <file>', 'Output file converted and merged input side file.', './output.side')
+    .option('-o, --output <file>', 'Output file converted input side file.', './output.side')
     .action((opts) => {
         if (opts.all) {
             getConfig().then((config) => {
@@ -72,7 +70,8 @@ program.command('convert').alias('c')
 
 program.command('merge <files...>')
     .description('Create app template. Please enter app path')
-    .option('-n, --name [name]')
+    .option('-p, --project <name>')
+    .option('-o, --output <file>', 'Output file merged input side file.', './output.side')
     .option('--suites', 'Only merge suites', false)
     .option('--tests', 'Only merge tests', false)
     .action((files: Array<string>, opts) => {
@@ -88,13 +87,17 @@ program.command('merge <files...>')
         if (!isValid) return;
 
         const merge = new Merge(opts.suites, opts.tests);
-        merge.exec(opts.name, files);
+        console.log(opts);
+        
+        merge.exec(opts.project, files).then(() => {
+            merge.save(opts.output);
+        });
         SystemLogger.instance.info(`Merged side files ${files.join(',')}`);
     });
 
 program.command('create [appPath]')
     .description('Create app template. Please enter app path')
-    .action((appPath: string = './') => {
+    .action((appPath = './') => {
         const create = new Create(appPath);
         create.exec();
         SystemLogger.instance.info(`Created ${appPath} project.`);
@@ -102,7 +105,7 @@ program.command('create [appPath]')
 
 program.command('init [appPath]')
     .description(`Generate ${configFile} config file for converting side`)
-    .action((appPath: string = './') => {
+    .action((appPath = './') => {
         const init = new Init(appPath);
         init.exec();
     });

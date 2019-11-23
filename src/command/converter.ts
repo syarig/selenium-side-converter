@@ -17,7 +17,7 @@ export class Converter {
     private replaceText: Function;
     private replaceXpath: Function;
 
-    public async init(inputFile: string, setting: Setting) {
+    public async init(inputFile: string, setting: Setting): Promise<void> {
         setting.setSettingPath(inputFile);
         this.input = await util.readJson(inputFile);
         this.setReplaceFile(setting.get('fileSetting'));
@@ -25,31 +25,31 @@ export class Converter {
         this.setReplaceXpath(setting.get('xpathSetting'));
     }
 
-    private setReplaceFile(setting: object) {
+    private setReplaceFile(setting: object): void {
         this.replaceFile = this.replace(new File(setting));
     }
 
-    private setReplaceText(setting: object) {
+    private setReplaceText(setting: object): void {
         this.replaceText = this.replace(new Text(setting));
     }
 
-    private setReplaceXpath(setting: object) {
+    private setReplaceXpath(setting: object): void {
         this.replaceXpath = this.replace(new Xpath(setting));
     }
 
-    public exec() {
+    public exec(): void {
         const tests = _.get(this.input, keyTests, []);
         _.forEach(tests, (test) => {
-            const commands = _.get(test, keyCommands, [])
+            const commands = _.get(test, keyCommands, []);
             this.execCommands(commands);
         });
     }
 
-    public save(output: string) {
+    public save(output: string): void {
         fs.writeFile(output, JSON.stringify(this.input, null, '    '));
     }
 
-    private execCommands(commands: object) {
+    private execCommands(commands: object): void {
         _.forEach(commands, (command: Command) => {
             command.target = this.replaceXpath(command.target);
             command.target = this.replaceFile(command.target);
@@ -61,7 +61,7 @@ export class Converter {
         });
     }
 
-    private replace(replaceable: Replaceable) {
+    private replace(replaceable: Replaceable): (target: string) => string {
         return (target: string): string => {
             if (!target) {
                 return target;
@@ -75,8 +75,8 @@ export class Converter {
                 }
 
                 replaced = target.replace(new RegExp(template, 'g'), replaceable.convSetting(setting));
-            })
+            });
             return replaced;
-        }
+        };
     }
 }

@@ -1,9 +1,8 @@
 
 import { promises as fs } from 'fs';
-import _ from 'lodash';
 import { SystemLogger } from 'src/logger/system_logger';
 
-export async function readJson(input: string) {
+export async function readJson(input: string): Promise<object> {
     let content = {};
     try {
         const file = await fs.readFile(input, 'utf-8');
