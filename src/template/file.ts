@@ -19,6 +19,6 @@ export class File implements Replaceable {
     }
 
     public getTemplate(key: string) {
-        return `\{file:${key}\}`;
+        return `{file:${key}}`;
     }
 }

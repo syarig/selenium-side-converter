@@ -17,6 +17,6 @@ export class Text implements Replaceable {
     }
 
     public getTemplate(key: string): string {
-        return `{file:${key}}`;
+        return `{text:${key}}`;
     }
 }
