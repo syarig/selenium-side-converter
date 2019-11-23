@@ -1,7 +1,7 @@
 {
   "name": "selenium-side-converter",
   "version": "1.0.0",
-  "description": "",
+  "description": "Converter for selenium side file",
   "private": true,
   "main": "index.js",
   "bin": {
@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint --ext .js --ignore-path .gitignore .",
     "build": "webpack --config webpack.dev.js",
-    "prepare": "webpack --config webpack.config.js",
+    "prepare": "webpack --config webpack.prod.js",
     "watch": "npm run build -- --watch",
     "test": "jest"
   },
