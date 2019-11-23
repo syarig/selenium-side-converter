@@ -61,7 +61,6 @@ export class Init {
 
 export class Setting {
     private setting: object;
-    private settingPath: string;
     private inputsDir: string;
 
     public async init(config: Config): Promise<void> {
@@ -73,7 +72,7 @@ export class Setting {
         };
     }
 
-    public setSettingPath(inputFile: string): void {
+    public getSettingPath(inputFile: string): string {
         const absoluteInputFile = path.resolve(inputFile);
         let absoluteInputsDir = path.resolve(this.inputsDir);
         if (absoluteInputFile.indexOf(absoluteInputsDir) === -1) {
@@ -83,11 +82,11 @@ export class Setting {
             .replace(absoluteInputsDir + '/', '');
 
         const basename = path.basename(inputFile, path.extname(inputFile));
-        this.settingPath = path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
+        return path.join(path.dirname(settingPath), basename).replace(new RegExp('/', 'g'), '.');
     }
 
     public get(key: string): object {
-        const setting = _.get(this.setting, key + '.' + this.settingPath, {});
+        const setting = _.get(this.setting, key, {});
         if (!setting) {
             SystemLogger.instance.error(`"${key}" setting doesn't exists`);
         }

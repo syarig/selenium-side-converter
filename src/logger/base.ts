@@ -2,7 +2,7 @@
 import { Logger, getLogger } from 'log4js';
 
 interface Loggable {
-    log(message: string): void
+    log(message: string): void;
 }
 
 export class Base implements Loggable {
@@ -14,7 +14,7 @@ export class Base implements Loggable {
         this.logger.level = 'info';
     }
 
-    public log(message: string) {
+    public log(message: string): void {
         console.log(message);
     }
 }

@@ -18,7 +18,7 @@ async function getConfig(args: object = {}): Promise<Config> {
 
 async function getSetting(config: Config): Promise<Setting> {
     const setting = new Setting();
-    setting.init(config);
+    await setting.init(config);
     return setting;
 }
 
@@ -34,12 +34,13 @@ function convertAll(config: Config): void {
 function convert(config: Config, input: string, output: string): void {
     getSetting(config).then((setting) => {
         const converter = new Converter();
-        converter.init(input, setting).then(() => {
-            SystemLogger.instance.info(`Ready for ${input} conversion.`);
-            converter.exec()
-            converter.save(output);
-            SystemLogger.instance.info(`${input} converting finish.`);
-        });
+        return converter.init(input, setting);
+
+    }).then((converter) => {
+        SystemLogger.instance.info(`Ready for ${input} conversion.`);
+        converter.exec()
+        converter.save(output);
+        SystemLogger.instance.info(`${input} converting finish.`);
     });
 }
 
@@ -87,8 +88,6 @@ program.command('merge <files...>')
         if (!isValid) return;
 
         const merge = new Merge(opts.suites, opts.tests);
-        console.log(opts);
-        
         merge.exec(opts.project, files).then(() => {
             merge.save(opts.output);
         });
