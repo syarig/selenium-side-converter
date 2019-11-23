@@ -73,7 +73,7 @@ Converting require setting files. There are file.json, xpath.json, text.json in 
 
 Convert all files under the inputs directory. The converted file is placed under outputs in the same directory structure. Inputs and outputs, conversion settings can be changed in the `ssconfig.json` file
 
-## Merging side files
+### Merging side files
 
 `selenium-side-converter merge --tests -o merged.side file1.side file2.side file3.side`
 
