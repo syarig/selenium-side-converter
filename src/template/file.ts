@@ -1,5 +1,4 @@
 
-import _ from 'lodash';
 import path from 'path';
 import { Replaceable } from 'src/template/side';
 
@@ -10,7 +9,7 @@ export class File implements Replaceable {
         this.fileSetting = fileSettingFile;
     }
 
-    public getSettings() {
+    public getSettings(): object {
         return this.fileSetting;
     }
 
@@ -18,7 +17,7 @@ export class File implements Replaceable {
         return path.resolve(setting);
     }
 
-    public getTemplate(key: string) {
+    public getTemplate(key: string): string {
         return `{file:${key}}`;
     }
 }
