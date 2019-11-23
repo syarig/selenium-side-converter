@@ -1,7 +1,7 @@
 {
   "name": "selenium-side-converter",
   "version": "1.0.0",
-  "description": "Converter for selenium side file",
+  "description": "Command line tool for converting template in selenium .side file. ",
   "private": true,
   "main": "index.js",
   "bin": {
