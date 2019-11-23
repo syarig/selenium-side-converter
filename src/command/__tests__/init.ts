@@ -1,15 +1,14 @@
 import { Config, Setting } from "src/command/init";
 
 describe('Setting', () => {
-  describe('setSettingPath', () => {
+  describe('getSettingPath', () => {
     test('Normal scenario', () => {
       const inputFile = 'dir1/dir2/inputs/test.side';
       const settingPath = 'test';
       const setting = new Setting();
       setting['inputsDir'] = 'dir1/dir2/inputs/';
 
-      setting.setSettingPath(inputFile);
-      expect(setting['settingPath']).toBe(settingPath);
+      expect(setting.getSettingPath(inputFile)).toBe(settingPath);
     });
 
     test('Relative path', () => {
@@ -18,8 +17,7 @@ describe('Setting', () => {
       const setting = new Setting();
       setting['inputsDir'] = './dir1/dir2/inputs/';
 
-      setting.setSettingPath(inputFile);
-      expect(setting['settingPath']).toBe(settingPath);
+      expect(setting.getSettingPath(inputFile)).toBe(settingPath);
     });
 
     test('When inputsDir and inputFile path different', () => {
@@ -28,8 +26,7 @@ describe('Setting', () => {
       const setting = new Setting();
       setting['inputsDir'] = 'dir1/dir2/inputs/';
 
-      setting.setSettingPath(inputFile);
-      expect(setting['settingPath']).toBe(settingPath);
+      expect(setting.getSettingPath(inputFile)).toBe(settingPath);
     });
 
     test('When there is inputFile in current dir', () => {
@@ -38,8 +35,7 @@ describe('Setting', () => {
       const setting = new Setting();
       setting['inputsDir'] = 'dir1/dir2/inputs/';
 
-      setting.setSettingPath(inputFile);
-      expect(setting['settingPath']).toBe(settingPath);
+      expect(setting.getSettingPath(inputFile)).toBe(settingPath);
     });
   });
 });

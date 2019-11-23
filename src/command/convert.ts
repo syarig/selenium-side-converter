@@ -26,7 +26,7 @@ export class Convert implements Walker {
   }
 
   private async execConverter(inputFile: string): Promise<void> {
-    if (this.config.isSideFileExtname(inputFile)) {
+    if (!this.config.isSideFileExtname(inputFile)) {
       throw `Skipped. ${inputFile} is not side extension.`;
     }
 

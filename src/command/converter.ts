@@ -17,12 +17,13 @@ export class Converter {
     private replaceText: Function;
     private replaceXpath: Function;
 
-    public async init(inputFile: string, setting: Setting): Promise<void> {
-        setting.setSettingPath(inputFile);
+    public async init(inputFile: string, setting: Setting): Promise<Converter> {
         this.input = await util.readJson(inputFile);
-        this.setReplaceFile(setting.get('fileSetting'));
-        this.setReplaceText(setting.get('textSetting'));
-        this.setReplaceXpath(setting.get('xpathSetting'));
+        const settingPath = setting.getSettingPath(inputFile);
+        this.setReplaceFile(setting.get(`fileSetting.${settingPath}`));
+        this.setReplaceText(setting.get(`textSetting.${settingPath}`));
+        this.setReplaceXpath(setting.get(`xpathSetting.${settingPath}`));
+        return this;
     }
 
     private setReplaceFile(setting: object): void {
