@@ -13,35 +13,37 @@ const keyCommands = 'commands';
 
 export class Converter {
     private input: object;
-    private replaceFile: Function;
-    private replaceText: Function;
-    private replaceXpath: Function;
+    private replaceFile: (target: string) => string;
+    private replaceText: (target: string) => string;
+    private replaceXpath: (target: string) => string;
 
     public async init(inputFile: string, setting: Setting): Promise<Converter> {
         this.input = await util.readJson(inputFile);
-        const getSetting = _.curry(this.getSetting)(inputFile)(setting);
+        const getSetting = this.getSettingFn(inputFile, setting);
         this.setReplaceFile(getSetting('fileSetting'));
         this.setReplaceText(getSetting('textSetting'));
         this.setReplaceXpath(getSetting('xpathSetting'));
         return this;
     }
 
-    private getSetting(inputFile: string, setting: Setting, name: string): object {
-        const settingPath = [name, setting.getSettingPath(inputFile)].join('.');
-        const templateSettings = setting.get(settingPath);
+    private getSettingFn(inputFile: string, setting: Setting): (name: string) => object {
+        return (name: string): object => {
+            const settingPath = [name, setting.getSettingPath(inputFile)].join('.');
+            const templateSettings = setting.get(settingPath);
 
-        const splitted = settingPath.split('.');
-        _.times(splitted.length, (num) => {
-            const newSettingPath = splitted.slice(0, splitted.length - num).join('.');
-            this.mergeSetting(templateSettings, setting.get(newSettingPath));
-        });
+            const splitted = settingPath.split('.');
+            _.times(splitted.length, (num) => {
+                const newSettingPath = splitted.slice(0, splitted.length - num).join('.');
+                this.mergeSetting(templateSettings, setting.get(newSettingPath));
+            });
 
-        return templateSettings;
+            return templateSettings;
+        };
     }
 
     private mergeSetting(dist: object, src: object): void {
         _.forEach(src, (value: string | object, key: string) => {
-            if (_.isPlainObject(value)) {
+            if (_.isPlainObject(value) || _.has(dist, key)) {
                 return;
             }
 

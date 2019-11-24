@@ -126,6 +126,19 @@ describe('Converter', () => {
         key1: 'value1',
         key2: 'value2',
       };
+      const settingObj4 = {
+        root: {
+          dir1: {
+            key1: 'value1',
+            dir2: {
+              key1: 'value2',
+            }
+          }
+        }
+      };
+      const expected4 = {
+        key1: 'value2',
+      };
 
       const args: Array<Arg> = [
         {
@@ -146,6 +159,12 @@ describe('Converter', () => {
           settingObj: settingObj3,
           expected: expected3
         },
+        {
+          name: 'root',
+          inputFile: 'inputsDir/dir1/dir2/dir3',
+          settingObj: settingObj4,
+          expected: expected4
+        },
       ];
 
       args.forEach((arg: Arg) => {
@@ -154,7 +173,8 @@ describe('Converter', () => {
         setting['setting'] = arg.settingObj;
 
         const converter = new Converter();
-        expect(converter['getSetting'](arg.inputFile, setting, arg.name)).toStrictEqual(arg.expected);
+        const getSetting = converter['getSettingFn'](arg.inputFile, setting);
+        expect(getSetting(arg.name)).toStrictEqual(arg.expected);
       });
     });
   });
