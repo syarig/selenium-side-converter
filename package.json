@@ -1,21 +1,10 @@
 {
   "name": "selenium-side-converter",
-  "version": "1.0.0",
   "description": "Command line tool for converting template in selenium .side file. ",
-  "main": "index.js",
+  "version": "1.0.0",
   "bin": {
     "selenium-side-converter": "./bin/selenium-side-converter.js"
   },
-  "scripts": {
-    "lint": "eslint --ext .js --ignore-path .gitignore .",
-    "build": "webpack --config webpack.dev.js",
-    "prepare": "webpack --config webpack.prod.js",
-    "watch": "npm run build -- --watch",
-    "test": "jest"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.0.23",
@@ -36,5 +25,21 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-merge": "^4.2.2"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "bin"
+  ],
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.dev.js",
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "prepare": "webpack --config webpack.prod.js",
+    "test": "jest",
+    "watch": "npm run build -- --watch"
   }
 }
