@@ -1,7 +1,7 @@
 {
   "name": "selenium-side-converter",
   "description": "Command line tool for converting template in selenium .side file. ",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "bin": {
     "selenium-side-converter": "./bin/selenium-side-converter.js"
   },
@@ -30,10 +30,11 @@
     "README.md",
     "LICENSE",
     "package.json",
-    "bin"
+    "bin",
+    "dist"
   ],
   "keywords": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.dev.js",
