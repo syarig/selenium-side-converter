@@ -3,6 +3,7 @@ import { Xpath } from 'src/template/xpath';
 import { Text } from 'src/template/text';
 import { Converter } from 'src/command/converter';
 import { mocked } from 'ts-jest/utils';
+import { Setting } from 'src/command/init';
 
 jest.mock('src/template/xpath');
 jest.mock('src/template/text');
@@ -66,4 +67,95 @@ describe('Converter', () => {
       expect(mockReplace(target)).toBe(expected);
     });
   });
-})
+
+  describe('getSetting', () => {
+    interface Arg {
+      name: string;
+      inputFile: string;
+      settingObj: object;
+      expected: object;
+    }
+
+    test('Normal scenario', async () => {
+      const settingObj1 = {
+        root: {
+          dir1: {
+            key1: 'value1',
+            dir2: {
+              key2: 'value2',
+              dir3: {
+                key3: 'value3',
+              }
+            }
+          }
+        }
+      };
+      const expected1 = {
+        key1: 'value1',
+        key2: 'value2',
+        key3: 'value3',
+      };
+      const settingObj2 = {
+        root: {
+          other1: {
+            key1: 'value1',
+            dir2: {
+              key2: 'value2',
+              other3: {
+                key3: 'value3',
+              }
+            }
+          }
+        }
+      };
+      const expected2 = {};
+      const settingObj3 = {
+        root: {
+          dir1: {
+            key1: 'value1',
+            dir2: {
+              key2: 'value2',
+              other3: {
+                key3: 'value3',
+              }
+            }
+          }
+        }
+      };
+      const expected3 = {
+        key1: 'value1',
+        key2: 'value2',
+      };
+
+      const args: Array<Arg> = [
+        {
+          name: 'root',
+          inputFile: 'inputsDir/dir1/dir2/dir3',
+          settingObj: settingObj1,
+          expected: expected1
+        },
+        {
+          name: 'root',
+          inputFile: 'inputsDir/dir1/dir2/dir3',
+          settingObj: settingObj2,
+          expected: expected2
+        },
+        {
+          name: 'root',
+          inputFile: 'inputsDir/dir1/dir2/dir3',
+          settingObj: settingObj3,
+          expected: expected3
+        },
+      ];
+
+      args.forEach((arg: Arg) => {
+        const setting = new Setting();
+        setting['inputsDir'] = 'inputsDir';
+        setting['setting'] = arg.settingObj;
+
+        const converter = new Converter();
+        expect(converter['getSetting'](arg.inputFile, setting, arg.name)).toStrictEqual(arg.expected);
+      });
+    });
+  });
+});

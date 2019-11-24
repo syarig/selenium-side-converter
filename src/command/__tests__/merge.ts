@@ -71,12 +71,12 @@ describe('Merge', () => {
 
       args.forEach((arg: Arg) => {
         Merge.readJson = jest.fn()
-          .mockImplementation(async () => {
+          .mockImplementationOnce(async () => {
             return new Promise((resolve) => {
               resolve(sideFile1);
             });
           })
-          .mockImplementation(async () => {
+          .mockImplementationOnce(async () => {
             return new Promise((resolve) => {
               resolve(sideFile2);
             });

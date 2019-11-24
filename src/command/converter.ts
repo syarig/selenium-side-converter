@@ -19,11 +19,34 @@ export class Converter {
 
     public async init(inputFile: string, setting: Setting): Promise<Converter> {
         this.input = await util.readJson(inputFile);
-        const settingPath = setting.getSettingPath(inputFile);
-        this.setReplaceFile(setting.get(`fileSetting.${settingPath}`));
-        this.setReplaceText(setting.get(`textSetting.${settingPath}`));
-        this.setReplaceXpath(setting.get(`xpathSetting.${settingPath}`));
+        const getSetting = _.curry(this.getSetting)(inputFile)(setting);
+        this.setReplaceFile(getSetting('fileSetting'));
+        this.setReplaceText(getSetting('textSetting'));
+        this.setReplaceXpath(getSetting('xpathSetting'));
         return this;
+    }
+
+    private getSetting(inputFile: string, setting: Setting, name: string): object {
+        const settingPath = [name, setting.getSettingPath(inputFile)].join('.');
+        const templateSettings = setting.get(settingPath);
+
+        const splitted = settingPath.split('.');
+        _.times(splitted.length, (num) => {
+            const newSettingPath = splitted.slice(0, splitted.length - num).join('.');
+            this.mergeSetting(templateSettings, setting.get(newSettingPath));
+        });
+
+        return templateSettings;
+    }
+
+    private mergeSetting(dist: object, src: object): void {
+        _.forEach(src, (value: string | object, key: string) => {
+            if (_.isPlainObject(value)) {
+                return;
+            }
+
+            _.set(dist, key, value);
+        });
     }
 
     private setReplaceFile(setting: object): void {
