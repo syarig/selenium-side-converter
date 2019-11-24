@@ -18,7 +18,7 @@ or
 The following directory will be created.
 
 ```
-project-name
+selenium-project
 ├── files
 ├── inputs
 ├── outputs
@@ -31,13 +31,13 @@ project-name
 
 ### Converting template in side file
 
-`selenium-side-converter convert -i target.side`
+`selenium-side-converter convert -i target.side -o output.side`
 
 If your side file has command like below, Replace template in setting files. 
 
 Converting require setting files. There are file.json, xpath.json, text.json in ./settings by default loaded.
 
-*target.side*
+*inputs/target.side*
 ```json
 {
     "id": "e506b2b3-6901-4cfa-a3bb-301352e1e6f0",
@@ -48,8 +48,8 @@ Converting require setting files. There are file.json, xpath.json, text.json in 
     "value": "{text:MESSAGE_TEXT}"
 }
 ```
-
-*xpath.json*
+  
+*settings/xpath.json*
 ```json
 {
     "target": {
@@ -57,8 +57,8 @@ Converting require setting files. There are file.json, xpath.json, text.json in 
     }
 }
 ```
-
-*text.json*
+  
+*settings/text.json*
 ```json
 {
     "target": {
@@ -71,7 +71,42 @@ Converting require setting files. There are file.json, xpath.json, text.json in 
 
 `selenium-side-converter convert --all`
 
-Convert all files under the inputs directory. The converted file is placed under outputs in the same directory structure. Inputs and outputs, conversion settings can be changed in the `ssconfig.json` file
+Convert all files under the inputs directory. The converted file is placed under outputs in the same directory structure. It also corresponds to the json structure. For example. like below. And outputs, inputs directory etc. can be changed in the `ssconfig.json`.
+
+```
+selenium-project
+├── files
+│   └── example-input-picture.jpg
+├── inputs
+│   └── test_page
+│       └── target.side
+├── outputs
+│   └── test_page
+│       └── target.side
+```
+  
+*settings/file.json*
+```json
+{
+    "test-page": {
+        "target": {
+            "test_picture": "example-input-picture.jpg"
+        }
+    }
+}
+```
+  
+*outputs/test_page/target.side*
+```json
+{
+    "id": "e506b2b3-6901-4cfa-a3bb-301352e1e6f0",
+    "comment": "",
+    "command": "type",
+    "target": "//input[@id='upload-form']",
+    "targets": [],
+    "value": "/your_pc_absolute_path/files/example-input-picture.jpg"
+}
+```
 
 ### Merging side files
 
