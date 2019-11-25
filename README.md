@@ -3,17 +3,17 @@
 
 ## Installation
 
-`yarn global add selenium-side-runner`
+`yarn global add selenium-side-converter`
 
 or
 
-`npm install -g selenium-side-runner`
+`npm install -g selenium-side-converter`
 
 ## Usage
 
 ### Create Project
 
-`selenium-side-converter create ./project-name`
+`selenium-side-converter create ./selenium-project`
 
 The following directory will be created.
 
