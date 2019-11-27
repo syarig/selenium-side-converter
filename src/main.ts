@@ -44,8 +44,14 @@ function convert(config: Config, input: string, output: string): void {
     });
 }
 
+function showHelp(): void {
+    program.help((str: string): string => {
+        return str.replace('*\n', '');
+    });
+}
+
 program.version('0.0.1', '-v, --version')
-    .description('Convert selenium side file. Please enter side file.')
+    .description('Convert selenium side file. Please enter side file.');
 
 program.command('convert').alias('c')
     .option('--all', 'convert all side files', false)
@@ -70,7 +76,7 @@ program.command('convert').alias('c')
     });
 
 program.command('merge <files...>')
-    .description('Create app template. Please enter app path')
+    .description('Merge side files in tests and suites.')
     .option('-p, --project <name>')
     .option('-o, --output <file>', 'Output file merged input side file.', './output.side')
     .option('--suites', 'Only merge suites', false)
@@ -110,14 +116,13 @@ program.command('init [appPath]')
     });
 
 program.command('*')
+    .description('The same --help')
     .action(() => {
-        console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+        showHelp();
     });
 
 program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-    program.help((str: string): string => {
-        return str.replace('*\n', '');
-    });
+    showHelp();
 }
