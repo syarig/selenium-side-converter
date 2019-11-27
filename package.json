@@ -33,9 +33,17 @@
     "bin",
     "dist"
   ],
-  "keywords": [],
+  "homepage": "https://github.com/syarig/selenium-side-converter",
+  "keywords": [
+    "CLI",
+    "selenium"
+  ],
   "license": "Apache-2.0",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/syarig/selenium-side-converter"
+  },
   "scripts": {
     "build": "webpack --config webpack.dev.js",
     "lint": "eslint --ext .js --ignore-path .gitignore .",
