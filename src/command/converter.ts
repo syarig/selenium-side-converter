@@ -93,16 +93,15 @@ export class Converter {
                 return target;
             }
 
-            let replaced = target;
             _.forEach(replaceable.getSettings(), (setting: string, key: string) => {
                 const template = replaceable.getTemplate(key);
                 if (target.indexOf(template) === -1) {
                     return;
                 }
 
-                replaced = target.replace(new RegExp(template, 'g'), replaceable.convSetting(setting));
+                target = target.replace(new RegExp(template, 'g'), replaceable.convSetting(setting));
             });
-            return replaced;
+            return target;
         };
     }
 }
