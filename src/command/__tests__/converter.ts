@@ -41,29 +41,34 @@ describe('Converter', () => {
       expect(mockReplace(target)).toBe(expected);
     });
 
-    test('Multi contained template', () => {
+    test('Contain multi different templete', () => {
       mocked(Text).mockImplementation(
         (): any => {
           return {
             getSettings: (): object => {
               return {
-                NORMAL_SCENARIO_XPATH: 'normal_scenario_xpath'
+                TEXT1: 'normal_scenario_text1',
+                TEXT2: 'normal_scenario_text2'
               };
             },
-            getTemplate: (): string => {
-              return '{text:NORMAL_SCENARIO_XPATH}';
-            },
-            convSetting: (): string => {
-              return 'normal_scenario_xpath';
-            },
-          }
+            getTemplate: jest.fn().mockImplementationOnce((): string => {
+              return '{text:TEXT1}';
+            }).mockImplementationOnce((): string => {
+              return '{text:TEXT2}';
+            }),
+            convSetting: jest.fn().mockImplementationOnce((): string => {
+              return 'normal_scenario_text1';
+            }).mockImplementationOnce((): string => {
+              return 'normal_scenario_text2';
+            }),
+          };
         }
       );
-      const expected = '{text:NOT_MATCH} test normal_scenario_xpath hoge normal_scenario_xpath';
+      const expected = '{text:NOT_MATCH} test normal_scenario_text1 hoge normal_scenario_text2';
       const text = new Text({ textSettingFile: 'textSettingFile' });
       const converter = new Converter();
       const mockReplace = converter['replace'](text);
-      const target = '{text:NOT_MATCH} test {text:NORMAL_SCENARIO_XPATH} hoge {text:NORMAL_SCENARIO_XPATH}';
+      const target = '{text:NOT_MATCH} test {text:TEXT1} hoge {text:TEXT2}';
       expect(mockReplace(target)).toBe(expected);
     });
   });
