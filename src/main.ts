@@ -22,26 +22,22 @@ async function getSetting(config: Config): Promise<Setting> {
     return setting;
 }
 
-function convertAll(config: Config): void {
-    getSetting(config).then((setting) => {
-        SystemLogger.instance.info('Ready for conversion.');
-        const convert = new Convert(config, setting);
-        walk(config.get('inputsDir'), convert);
-        SystemLogger.instance.info('Finish converting all.');
-    });
+async function convertAll(config: Config): Promise<void> {
+    const setting = await getSetting(config);
+    SystemLogger.instance.log('Ready for conversion.');
+    const convert = new Convert(config, setting);
+    await walk(config.get('inputsDir'), convert);
+    SystemLogger.instance.log('Finish converting all.');
 }
 
-function convert(config: Config, input: string, output: string): void {
-    getSetting(config).then((setting) => {
-        const converter = new Converter();
-        return converter.init(input, config.get('filesDir'), setting);
-
-    }).then((converter) => {
-        SystemLogger.instance.info(`Ready for ${input} conversion.`);
-        converter.exec();
-        converter.save(output);
-        SystemLogger.instance.info(`${input} converting finish.`);
-    });
+async function convert(config: Config, input: string, output: string): Promise<void> {
+    const setting = await getSetting(config);
+    const converter = new Converter();
+    await converter.init(input, config.get('filesDir'), setting);
+    SystemLogger.instance.log(`Ready for ${input} conversion.`);
+    converter.exec();
+    await converter.save(output);
+    SystemLogger.instance.log(`${input} converting finish.`);
 }
 
 function showHelp(): void {
@@ -57,18 +53,15 @@ program.command('convert').alias('c')
     .option('--all', 'convert all side files', false)
     .option('-i, --input <file>', 'Input file converted and merged input side file.')
     .option('-o, --output <file>', 'Output file converted input side file.', './output.side')
-    .action((opts) => {
+    .action(async (opts) => {
+        const config = await getConfig();
         if (opts.all) {
-            getConfig().then((config) => {
-                convertAll(config);
-            });
+            await convertAll(config);
             return;
         }
 
         if (opts.input !== undefined) {
-            getConfig({ inputsDir: '.' }).then((config) => {
-                convert(config, opts.input, opts.output);
-            });
+            await convert(config, opts.input, opts.output);
             return;
         }
 
@@ -81,38 +74,36 @@ program.command('merge <files...>')
     .option('-o, --output <file>', 'Output file merged input side file.', './output.side')
     .option('--suites', 'Only merge suites', false)
     .option('--tests', 'Only merge tests', false)
-    .action((files: Array<string>, opts) => {
-        let isValid = true;
-        getConfig().then((config) => {
-            isValid = files.every((file: string) => {
-                if (!config.isSideFileExtname(file)) {
-                    SystemLogger.instance.error(`Invalid extention file included that selected merge ${file}.`);
-                    return false;
-                }
-            });
+    .action(async (files: Array<string>, opts) => {
+        const config = await getConfig();
+        const isValid = files.every((file: string) => {
+            if (!config.isSideFileExtname(file)) {
+                SystemLogger.instance.error(`Invalid extention file included that selected merge ${file}.`);
+                return false;
+            }
         });
         if (!isValid) return;
 
         const merge = new Merge(opts.suites, opts.tests);
-        merge.exec(opts.project, files).then(() => {
-            merge.save(opts.output);
-        });
-        SystemLogger.instance.info(`Merged side files ${files.join(',')}`);
+        await merge.exec(opts.project, files);
+        await merge.save(opts.output);
+        SystemLogger.instance.log(`Merged side files ${files.join(',')}`);
     });
 
 program.command('create [appPath]')
     .description('Create app template. Please enter app path')
-    .action((appPath = './') => {
+    .action(async (appPath = './') => {
         const create = new Create(appPath);
-        create.exec();
-        SystemLogger.instance.info(`Created ${appPath} project.`);
+        await create.exec();
+        SystemLogger.instance.log(`Created ${appPath} project.`);
     });
 
 program.command('init [appPath]')
     .description(`Generate ${configFile} config file for converting side`)
-    .action((appPath = './') => {
+    .action(async (appPath = './') => {
         const init = new Init(appPath);
-        init.exec();
+        await init.exec();
+        SystemLogger.instance.log(`Created a ssconfig.json file.`);
     });
 
 program.command('*')

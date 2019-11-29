@@ -59,8 +59,8 @@ export class Converter {
         });
     }
 
-    public save(output: string): void {
-        fs.writeFile(output, JSON.stringify(this.input, null, '    '));
+    public save(output: string): Promise<void> {
+        return fs.writeFile(output, JSON.stringify(this.input, null, '    '));
     }
 
     private execCommands(commands: object): void {

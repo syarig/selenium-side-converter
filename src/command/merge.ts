@@ -17,8 +17,8 @@ export class Merge {
     this.result = await this.merge(files, result);
   }
 
-  public save(outputFile: string): void {
-    fs.writeFile(outputFile, JSON.stringify(this.result, null, '    '));
+  public save(outputFile: string): Promise<void> {
+    return fs.writeFile(outputFile, JSON.stringify(this.result, null, '    '));
   }
 
   private async merge(files: Array<string>, result: SideFile, index = 0): Promise<SideFile> {

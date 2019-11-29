@@ -11,7 +11,6 @@ interface Arg {
 }
 
 describe('Merge', () => {
-
   describe('exec', () => {
     const name = 'merged-side-file';
     const sideFile1: SideFile = {

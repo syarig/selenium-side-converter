@@ -10,24 +10,24 @@ export class SystemLogger extends Base {
         return this._instance;
     }
 
-    public info(message: string) {
+    public info(message: string): void {
         this.logger.info(message);
     }
 
-    public debug(message: string) {
+    public debug(message: string): void {
         this.logger.debug(message);
     }
 
-    public warn(message: string) {
-        this.logger.warn(message)
+    public warn(message: string): void {
+        this.logger.warn(message);
     }
     
 
-    public error(message: string) {
+    public error(message: string): void {
         this.logger.error(message);
     }
 
-    public fatal(message: string) {
+    public fatal(message: string): void {
         this.logger.fatal(message);
     }
 }

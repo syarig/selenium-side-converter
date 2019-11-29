@@ -51,8 +51,8 @@ export class Init {
         this.appPath = appPath;
     }
 
-    public exec(): void {
-        fs.writeFile(
+    public exec(): Promise<void> {
+        return fs.writeFile(
             path.join(this.appPath, configFile),
             JSON.stringify(deafultConfig, null, '    ')
         );
@@ -63,13 +63,13 @@ export class Setting {
     private setting: object;
     private inputsDir: string;
 
-    public async init(config: Config): Promise<void> {
+    public async init(config: Config): Promise<Array<object>> {
         this.inputsDir = config.get('inputsDir');
-        this.setting = {
-            fileSetting: await util.readJson(config.get('fileSettingFile')),
-            textSetting: await util.readJson(config.get('textSettingFile')),
-            xpathSetting: await util.readJson(config.get('xpathSettingFile'))
-        };
+        const fileSetting = await util.readJson(config.get('fileSettingFile'));
+        const textSetting = await util.readJson(config.get('textSettingFile'));
+        const xpathSetting = await util.readJson(config.get('xpathSettingFile'));
+        this.setting = { fileSetting: fileSetting, textSetting: textSetting, xpathSetting: xpathSetting };
+        return Promise.all([fileSetting, textSetting, xpathSetting]);
     }
 
     public getSettingPath(inputFile: string): string {
