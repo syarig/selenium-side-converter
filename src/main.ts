@@ -116,9 +116,9 @@ program.command('init [appPath]')
     });
 
 program.command('*')
-    .description('The same --help')
+    .description('Unexpected command')
     .action(() => {
-        showHelp();
+        console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
     });
 
 program.parse(process.argv);
