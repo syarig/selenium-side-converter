@@ -40,7 +40,7 @@ export class Convert implements Walker {
 
   private async getConverter(inputFile: string): Promise<Converter> {
     const converter = new Converter();
-    await converter.init(inputFile, this.setting);
+    await converter.init(inputFile, this.config.get('filesDir'), this.setting);
     return converter;
   }
 }

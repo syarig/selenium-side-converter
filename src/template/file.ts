@@ -4,9 +4,11 @@ import { Replaceable } from 'src/template/side';
 
 export class File implements Replaceable {
     private fileSetting: object;
+    private filesDir: string;
 
-    constructor(fileSettingFile: object) {
+    constructor(fileSettingFile: object, filesDir: string) {
         this.fileSetting = fileSettingFile;
+        this.filesDir = filesDir;
     }
 
     public getSettings(): object {
@@ -14,7 +16,7 @@ export class File implements Replaceable {
     }
 
     public convSetting(setting: string): string {
-        return path.resolve(setting);
+        return path.resolve(path.join(this.filesDir, setting));
     }
 
     public getTemplate(key: string): string {
