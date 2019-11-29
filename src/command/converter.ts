@@ -17,12 +17,12 @@ export class Converter {
     private replaceText: (target: string) => string;
     private replaceXpath: (target: string) => string;
 
-    public async init(inputFile: string, setting: Setting): Promise<Converter> {
+    public async init(inputFile: string, filesDir: string, setting: Setting): Promise<Converter> {
         this.input = await util.readJson(inputFile);
         const getSetting = this.getSettingFn(inputFile, setting);
-        this.setReplaceFile(getSetting('fileSetting'));
-        this.setReplaceText(getSetting('textSetting'));
-        this.setReplaceXpath(getSetting('xpathSetting'));
+        this.replaceFile = this.replace(new File(getSetting('fileSetting'), filesDir));
+        this.replaceText = this.replace(new Text(getSetting('textSetting')));
+        this.replaceXpath = this.replace(new Xpath(getSetting('xpathSetting')));
         return this;
     }
 
@@ -49,18 +49,6 @@ export class Converter {
 
             _.set(dist, key, value);
         });
-    }
-
-    private setReplaceFile(setting: object): void {
-        this.replaceFile = this.replace(new File(setting));
-    }
-
-    private setReplaceText(setting: object): void {
-        this.replaceText = this.replace(new Text(setting));
-    }
-
-    private setReplaceXpath(setting: object): void {
-        this.replaceXpath = this.replace(new Xpath(setting));
     }
 
     public exec(): void {

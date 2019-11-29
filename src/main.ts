@@ -34,11 +34,11 @@ function convertAll(config: Config): void {
 function convert(config: Config, input: string, output: string): void {
     getSetting(config).then((setting) => {
         const converter = new Converter();
-        return converter.init(input, setting);
+        return converter.init(input, config.get('filesDir'), setting);
 
     }).then((converter) => {
         SystemLogger.instance.info(`Ready for ${input} conversion.`);
-        converter.exec()
+        converter.exec();
         converter.save(output);
         SystemLogger.instance.info(`${input} converting finish.`);
     });
