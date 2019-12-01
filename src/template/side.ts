@@ -13,6 +13,7 @@ export interface Suite {
 }
 
 export interface Test {
+    id: string;
     commands: Array<Command>;
 }
 
