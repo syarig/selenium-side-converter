@@ -1,5 +1,5 @@
 
-# Selenium Side Converter
+# Selenium SIDE Converter
 
 ## Installation
 
@@ -110,6 +110,14 @@ selenium-project
 
 ### Merging side files
 
-`selenium-side-converter merge --tests -o merged.side file1.side file2.side file3.side`
+`selenium-side-converter merge -o merged.side file1.side file2.side file3.side`
 
-It recursively merges Source file of file2.side, file2.side into the destination file file1.side and so generated merged.side. In this example, merging tests key only.
+It recursively merges Source file of file2.side, file2.side into the destination file file1.side and so generated merged.side. It is tests in side file that are merged.
+
+
+`selenium-side-converter merge --before-each e506b2b3-6901-4cfa-a3bb-301352e1e6f0 file1.side file2.side file3.side`
+
+If you have some test you need to do repeatedly for many tests, you can use `--before-each` and `--after-each`.
+It merge the test of the specified ID at the each tests.
+
+For example, `--before-each <id>` When id is the test contained in file1.side, It is merged to head that each test in file2, file3.

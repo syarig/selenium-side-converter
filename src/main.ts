@@ -69,11 +69,11 @@ program.command('convert').alias('c')
     });
 
 program.command('merge <files...>')
-    .description('Merge side files in tests and suites.')
+    .description('Merging each tests in side file so writing output.side by default.')
     .option('-p, --project <name>')
-    .option('-o, --output <file>', 'Output file merged input side file.', './output.side')
-    .option('--suites', 'Only merge suites', false)
-    .option('--tests', 'Only merge tests', false)
+    .option('-o, --output <file>', 'Output file is merged file\'s name', './output.side')
+    .option('--before-each <id>', 'Merge and Overwrite the test of the specified ID at the before each tests')
+    .option('--after-each <id>', 'Merge and Overwrite the test of the specified ID at the after each tests')
     .action(async (files: Array<string>, opts) => {
         const config = await getConfig();
         const isValid = files.every((file: string) => {
@@ -81,18 +81,27 @@ program.command('merge <files...>')
                 SystemLogger.instance.error(`Invalid extention file included that selected merge ${file}.`);
                 return false;
             }
+            return true;
         });
         if (!isValid) return;
 
-        const merge = new Merge(opts.suites, opts.tests);
-        await merge.exec(opts.project, files);
-        await merge.save(opts.output);
+        const isTask = (v: Promise<Array<void>> | undefined): boolean => v !== undefined;
+        const merge = new Merge(opts.project);
+        const tasks = [
+            opts.beforeEach && merge.beforeEach(opts.beforeEach, files),
+            opts.afterEach && merge.afterEach(opts.beforeEach, files)
+        ].filter(isTask);
+
+        if (tasks.length === 0) {
+            await merge.exec(files, opts.output);
+        }
+        await Promise.all(tasks);
         SystemLogger.instance.log(`Merged side files ${files.join(',')}`);
     });
 
-program.command('create [appPath]')
+program.command('create <appPath>')
     .description('Create app template. Please enter app path')
-    .action(async (appPath = './') => {
+    .action(async (appPath) => {
         const create = new Create(appPath);
         await create.exec();
         SystemLogger.instance.log(`Created ${appPath} project.`);
