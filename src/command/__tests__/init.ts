@@ -1,4 +1,4 @@
-import { Config, Setting } from "src/command/init";
+import { Config, Setting } from 'src/command/init';
 
 describe('Setting', () => {
   describe('getSettingPath', () => {

@@ -21,14 +21,16 @@ export const makeDirs = [
 export const [
     defaultXpathSettingFile,
     defaultFileSettingFile,
-    defaultTextSettingFile
-] = ['xpath.json', 'file.json', 'text.json'];
+    defaultTextSettingFile,
+    defaultCssSettingFile
+] = ['xpath.json', 'file.json', 'text.json', 'css.json'];
 
 
 export const settingFiles = [
     defaultXpathSettingFile,
     defaultFileSettingFile,
-    defaultTextSettingFile
+    defaultTextSettingFile,
+    defaultCssSettingFile
 ];
 
 export const configFile = 'ssconfig.json';
@@ -41,7 +43,8 @@ const deafultConfig = {
     filesDir: defaultFilesDir,
     xpathSettingFile: path.join(defaultSettingsDir, defaultXpathSettingFile),
     fileSettingFile: path.join(defaultSettingsDir, defaultFileSettingFile),
-    textSettingFile: path.join(defaultSettingsDir, defaultTextSettingFile)
+    textSettingFile: path.join(defaultSettingsDir, defaultTextSettingFile),
+    cssSettingFile: path.join(defaultSettingsDir, defaultCssSettingFile)
 };
 
 export class Init {
@@ -68,8 +71,14 @@ export class Setting {
         const fileSetting = await util.readJson(config.get('fileSettingFile'));
         const textSetting = await util.readJson(config.get('textSettingFile'));
         const xpathSetting = await util.readJson(config.get('xpathSettingFile'));
-        this.setting = { fileSetting: fileSetting, textSetting: textSetting, xpathSetting: xpathSetting };
-        return Promise.all([fileSetting, textSetting, xpathSetting]);
+        const cssSetting = await util.readJson(config.get('cssSettingFile'));
+        this.setting = {
+            fileSetting: fileSetting,
+            textSetting: textSetting,
+            xpathSetting: xpathSetting,
+            cssSetting: cssSetting
+        };
+        return Promise.all([fileSetting, textSetting, xpathSetting, cssSetting]);
     }
 
     public getSettingPath(inputFile: string): string {
