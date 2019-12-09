@@ -3,6 +3,7 @@ import { Setting } from 'src/command/init';
 import { File } from 'src/template/file';
 import { Xpath } from 'src/template/xpath';
 import { Text } from 'src/template/text';
+import { Css } from 'src/template/css';
 import { Command, Replaceable } from 'src/template/side';
 import { promises as fs } from 'fs';
 import * as util from 'src/util';
@@ -16,6 +17,7 @@ export class Converter {
     private replaceFile: (target: string) => string;
     private replaceText: (target: string) => string;
     private replaceXpath: (target: string) => string;
+    private replaceCss: (target: string) => string;
 
     public async init(inputFile: string, filesDir: string, setting: Setting): Promise<Converter> {
         this.input = await util.readJson(inputFile);
@@ -23,6 +25,7 @@ export class Converter {
         this.replaceFile = this.replace(new File(getSetting('fileSetting'), filesDir));
         this.replaceText = this.replace(new Text(getSetting('textSetting')));
         this.replaceXpath = this.replace(new Xpath(getSetting('xpathSetting')));
+        this.replaceCss = this.replace(new Css(getSetting('cssSetting')));
         return this;
     }
 
@@ -68,10 +71,12 @@ export class Converter {
             command.target = this.replaceXpath(command.target);
             command.target = this.replaceFile(command.target);
             command.target = this.replaceText(command.target);
+            command.target = this.replaceCss(command.target);
 
             command.value = this.replaceFile(command.value);
             command.value = this.replaceXpath(command.value);
             command.value = this.replaceText(command.value);
+            command.value = this.replaceCss(command.value);
         });
     }
 
