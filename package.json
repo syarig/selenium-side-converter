@@ -6,14 +6,14 @@
     "selenium-side-converter": "./bin/selenium-side-converter.js"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.149",
-    "@types/log4js": "^2.3.5",
-    "@types/node": "^12.12.14",
     "commander": "^4.0.1",
     "lodash": "^4.17.15",
     "log4js": "^6.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.149",
+    "@types/log4js": "^2.3.5",
+    "@types/node": "^12.12.14",
     "@types/jest": "^24.0.23",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
