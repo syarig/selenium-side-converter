@@ -1,5 +1,5 @@
 
-import { Replaceable } from 'src/template/side';
+import { Replaceable } from 'src/template/sideFile';
 
 export class Xpath implements Replaceable {
     private fileSetting: object;

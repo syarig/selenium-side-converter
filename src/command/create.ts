@@ -31,7 +31,7 @@ export class Create {
 
     private async touch(file: string): Promise<void> {
         file = path.join(this.appPath, init.defaultSettingsDir, file);
-        const handler: fs.FileHandle = await fs.open(path.resolve(file), 'w')
+        const handler: fs.FileHandle = await fs.open(path.resolve(file), 'w');
 
         return handler.close();
     }

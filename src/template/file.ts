@@ -1,6 +1,6 @@
 
 import path from 'path';
-import { Replaceable } from 'src/template/side';
+import { Replaceable } from 'src/template/sideFile';
 
 export class File implements Replaceable {
     private fileSetting: object;

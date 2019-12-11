@@ -1,5 +1,5 @@
 
-import { Replaceable } from 'src/template/side';
+import { Replaceable } from 'src/template/sideFile';
 
 export class Css implements Replaceable {
     private cssSetting: object;

@@ -1,5 +1,5 @@
 import { Merge } from 'src/command/merge';
-import { SideFile } from 'src/template/side';
+import { SideFile } from 'src/template/sideFile';
 
 
 describe('Merge', () => {
@@ -9,9 +9,11 @@ describe('Merge', () => {
       expected: SideFile;
     }
 
-    const name = 'merged-side-file';
+    const name = 'merged-side-file-name';
+    const url = 'merged-side-file-url';
     const sideFile1: SideFile = {
       name: 'name1',
+      url: 'url1',
       tests: [{
         id: 'testId1',
         commands: [{
@@ -27,6 +29,7 @@ describe('Merge', () => {
 
     const sideFile2: SideFile = {
       name: 'name2',
+      url: 'url2',
       tests: [{
         id: 'testId2',
         commands: [
@@ -54,6 +57,7 @@ describe('Merge', () => {
         files: ['sideFile1.side', 'sideFile2.side'],
         expected: {
           name: name,
+          url: url,
           tests: [{
             id: 'testId1',
             commands: [
@@ -102,6 +106,7 @@ describe('Merge', () => {
     beforeEach(() => {
       sideFile1 = {
         name: 'name1',
+        url: 'url1',
         tests: [
           {
             id: 'testId1',
@@ -121,6 +126,7 @@ describe('Merge', () => {
 
       sideFile2 = {
         name: 'name2',
+        url: 'url2',
         tests: [
           {
             id: 'testId2',
@@ -152,6 +158,7 @@ describe('Merge', () => {
         files: ['sideFile1.side', 'sideFile2.side'],
         expected: [{
           name: 'name2',
+          url: 'url2',
           tests: [
             {
               id: 'testId2',
@@ -223,6 +230,7 @@ describe('Merge', () => {
         files: ['sideFile1.side', 'sideFile2.side'],
         expected: [{
           name: 'name2',
+          url: 'url2',
           tests: [
             {
               id: 'testId2',
