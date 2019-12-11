@@ -4,6 +4,7 @@
 
 export interface SideFile {
     name: string;
+    url: string;
     tests: Array<Test>;
     suites: Array<Suite>;
 }

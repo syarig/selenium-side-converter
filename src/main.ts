@@ -1,5 +1,5 @@
 
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from 'src/logger/systemLogger';
 import { Create } from 'src/command/create';
 import { Merge } from 'src/command/merge';
 import { Converter } from 'src/command/converter';

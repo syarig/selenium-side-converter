@@ -1,4 +1,4 @@
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from 'src/logger/systemLogger';
 import { Setting, Config } from 'src/command/init';
 import { Converter } from 'src/command/converter';
 import { promises as fs } from 'fs';

@@ -1,5 +1,5 @@
 
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from 'src/logger/systemLogger';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import _ from 'lodash';

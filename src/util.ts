@@ -1,6 +1,6 @@
 
 import { promises as fs } from 'fs';
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from 'src/logger/systemLogger';
 
 export async function readJson(input: string): Promise<object> {
     let content = {};

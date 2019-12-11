@@ -1,8 +1,8 @@
 import * as util from 'src/util';
-import { SideFile, Test, Command } from 'src/template/side';
+import { SideFile, Test, Command } from 'src/template/sideFile';
 import { promises as fs } from 'fs';
 import _ from 'lodash';
-import { SystemLogger } from 'src/logger/system_logger';
+import { SystemLogger } from 'src/logger/systemLogger';
 
 export class Merge {
   static readJson: (input: string) => Promise<object>;

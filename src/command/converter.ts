@@ -4,7 +4,7 @@ import { File } from 'src/template/file';
 import { Xpath } from 'src/template/xpath';
 import { Text } from 'src/template/text';
 import { Css } from 'src/template/css';
-import { Command, Replaceable } from 'src/template/side';
+import { Command, Replaceable, SideFile } from 'src/template/sideFile';
 import { promises as fs } from 'fs';
 import * as util from 'src/util';
 import _ from 'lodash';
@@ -13,14 +13,14 @@ const keyTests = 'tests';
 const keyCommands = 'commands';
 
 export class Converter {
-    private input: object;
+    private input: SideFile;
     private replaceFile: (target: string) => string;
     private replaceText: (target: string) => string;
     private replaceXpath: (target: string) => string;
     private replaceCss: (target: string) => string;
 
     public async init(inputFile: string, filesDir: string, setting: Setting): Promise<Converter> {
-        this.input = await util.readJson(inputFile);
+        this.input = await util.readJson(inputFile) as SideFile;
         const getSetting = this.getSettingFn(inputFile, setting);
         this.replaceFile = this.replace(new File(getSetting('fileSetting'), filesDir));
         this.replaceText = this.replace(new Text(getSetting('textSetting')));
@@ -55,6 +55,7 @@ export class Converter {
     }
 
     public exec(): void {
+        this.input.url = this.replaceText(this.input.url);
         const tests = _.get(this.input, keyTests, []);
         _.forEach(tests, (test) => {
             const commands = _.get(test, keyCommands, []);
@@ -73,8 +74,8 @@ export class Converter {
             command.target = this.replaceText(command.target);
             command.target = this.replaceCss(command.target);
 
-            command.value = this.replaceFile(command.value);
             command.value = this.replaceXpath(command.value);
+            command.value = this.replaceFile(command.value);
             command.value = this.replaceText(command.value);
             command.value = this.replaceCss(command.value);
         });

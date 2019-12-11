@@ -1,5 +1,5 @@
 
-import { Replaceable } from 'src/template/side';
+import { Replaceable } from 'src/template/sideFile';
 
 export class Text implements Replaceable {
     private fileSetting: object;
