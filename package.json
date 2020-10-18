@@ -16,7 +16,7 @@
     "log4js": "^6.1.0"
   },
   "devDependencies": {
-    "@types/jest": "24.9.1",
+    "@types/jest": "26.0.14",
     "@types/lodash": "4.14.162",
     "@types/log4js": "2.3.5",
     "@types/node": "12.12.68",
