@@ -1,39 +1,48 @@
 {
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        "unusedExports": true
+      }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "sourceType": "module",
-        "project": "./tsconfig.json"
-    },
-    "plugins": [
-        "@typescript-eslint"
+    "@typescript-eslint/no-var-requires": 1,
+    "no-var-requires": 0,
+    "indent": [
+      2,
+      2
     ],
-    "env": {
-        "es6": true,
-        "node": true
-    },
-    "rules": {
-        "@typescript-eslint/no-unused-vars": [2, {"unusedExports": true}],
-        "@typescript-eslint/no-var-requires": 1,
-        "no-var-requires": 0,
-        "quotes": [
-            1,
-            "single",
-            {
-                "allowTemplateLiterals": true
-            }
-        ],
-        "semi": [
-            1,
-            "always"
-        ],
-        "linebreak-style": [
-            2,
-            "unix"
-        ]
-    }
+    "quotes": [
+      1,
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "semi": [
+      1,
+      "always"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ]
+  }
 }

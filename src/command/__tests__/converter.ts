@@ -1,9 +1,8 @@
-
-import { Xpath } from 'src/template/xpath';
-import { Text } from 'src/template/text';
-import { Converter } from 'src/command/converter';
-import { mocked } from 'ts-jest/utils';
-import { Setting } from 'src/command/init';
+import {Xpath} from 'src/template/xpath';
+import {Text} from 'src/template/text';
+import {Converter} from 'src/command/converter';
+import {mocked} from 'ts-jest/utils';
+import {Setting} from 'src/command/init';
 
 jest.mock('src/template/xpath');
 jest.mock('src/template/text');
@@ -34,7 +33,7 @@ describe('Converter', () => {
         }
       );
       const expected = 'xpath=normal_scenario_xpath';
-      const xpath = new Xpath({ xpathSettingFile: 'xpathSettingFile' });
+      const xpath = new Xpath({xpathSettingFile: 'xpathSettingFile'});
       const converter = new Converter();
       const mockReplace = converter['replace'](xpath);
       const target = '{xpath:NORMAL_SCENARIO_XPATH}';
@@ -65,7 +64,7 @@ describe('Converter', () => {
         }
       );
       const expected = '{text:NOT_MATCH} test normal_scenario_text1 hoge normal_scenario_text2';
-      const text = new Text({ textSettingFile: 'textSettingFile' });
+      const text = new Text({textSettingFile: 'textSettingFile'});
       const converter = new Converter();
       const mockReplace = converter['replace'](text);
       const target = '{text:NOT_MATCH} test {text:TEXT1} hoge {text:TEXT2}';

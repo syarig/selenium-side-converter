@@ -1,5 +1,5 @@
-import { Merge } from 'src/command/merge';
-import { SideFile } from 'src/template/sideFile';
+import {Merge} from 'src/command/merge';
+import {SideFile} from 'src/template/sideFile';
 
 
 describe('Merge', () => {
@@ -24,7 +24,7 @@ describe('Merge', () => {
           value: 'value1'
         }],
       }],
-      suites: [{ tests: ['suite_test1'] }]
+      suites: [{tests: ['suite_test1']}]
     };
 
     const sideFile2: SideFile = {
@@ -49,7 +49,7 @@ describe('Merge', () => {
           }
         ]
       }],
-      suites: [{ tests: ['suite_test2'] }]
+      suites: [{tests: ['suite_test2']}]
     };
 
     test('Normal scenario', () => {
@@ -70,7 +70,7 @@ describe('Merge', () => {
               },
             ],
           }],
-          suites: [{ tests: ['suite_test1', 'suite_test2'] }]
+          suites: [{tests: ['suite_test1', 'suite_test2']}]
         }
       }];
 
@@ -100,6 +100,7 @@ describe('Merge', () => {
       files: Array<string>;
       expected: Array<SideFile>;
     }
+
     let sideFile1: SideFile;
     let sideFile2: SideFile;
 
@@ -121,7 +122,7 @@ describe('Merge', () => {
             ],
           }
         ],
-        suites: [{ tests: ['suite_test1'] }]
+        suites: [{tests: ['suite_test1']}]
       };
 
       sideFile2 = {
@@ -149,7 +150,7 @@ describe('Merge', () => {
             }],
           }
         ],
-        suites: [{ tests: ['suite_test2'] }]
+        suites: [{tests: ['suite_test2']}]
       };
     });
 
@@ -199,7 +200,7 @@ describe('Merge', () => {
               ],
             }
           ],
-          suites: [{ tests: ['suite_test2'] }]
+          suites: [{tests: ['suite_test2']}]
         }]
       }];
 
@@ -271,7 +272,7 @@ describe('Merge', () => {
               ],
             }
           ],
-          suites: [{ tests: ['suite_test2'] }]
+          suites: [{tests: ['suite_test2']}]
         }]
       }];
 

@@ -1,22 +1,21 @@
-
-import { Replaceable } from 'src/template/sideFile';
+import {Replaceable} from 'src/template/sideFile';
 
 export class Text implements Replaceable {
-    private fileSetting: object;
+  private fileSetting: object;
 
-    constructor(fileSettingFile: object) {
-        this.fileSetting = fileSettingFile;
-    }
+  constructor(fileSettingFile: object) {
+    this.fileSetting = fileSettingFile;
+  }
 
-    public getSettings(): object {
-        return this.fileSetting;
-    }
+  public getSettings(): object {
+    return this.fileSetting;
+  }
 
-    public convSetting(setting: string): string {
-        return setting; 
-    }
+  public convSetting(setting: string): string {
+    return setting;
+  }
 
-    public getTemplate(key: string): string {
-        return `{text:${key}}`;
-    }
+  public getTemplate(key: string): string {
+    return `{text:${key}}`;
+  }
 }

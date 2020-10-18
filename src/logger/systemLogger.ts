@@ -1,33 +1,28 @@
-
-import { Base } from 'src/logger/base';
+import {Base} from 'src/logger/base';
 
 export class SystemLogger extends Base {
-    public static get instance(): SystemLogger {
-        if (!this._instance) {
-            this._instance = new SystemLogger('system');
-        }
-
-        return this._instance;
+  public static get instance(): SystemLogger {
+    if (!this._instance) {
+      this._instance = new SystemLogger('system');
     }
 
-    public info(message: string): void {
-        this.logger.info(message);
-    }
+    return this._instance;
+  }
 
-    public debug(message: string): void {
-        this.logger.debug(message);
-    }
+  public info(message: string): void {
+    this.logger.info(message);
+  }
 
-    public warn(message: string): void {
-        this.logger.warn(message);
-    }
-    
+  public debug(message: string): void {
+    this.logger.debug(message);
+  }
 
-    public error(message: string): void {
-        this.logger.error(message);
-    }
+  public warn(message: string): void {
+    this.logger.warn(message);
+  }
 
-    public fatal(message: string): void {
-        this.logger.fatal(message);
-    }
+
+  public error(message: string): void {
+    this.logger.error(message);
+  }
 }

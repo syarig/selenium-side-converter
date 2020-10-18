@@ -1,8 +1,8 @@
-import { SystemLogger } from 'src/logger/systemLogger';
-import { Setting, Config } from 'src/command/init';
-import { Converter } from 'src/command/converter';
-import { promises as fs } from 'fs';
-import { Walker } from 'src/command/walker';
+import {SystemLogger} from 'src/logger/systemLogger';
+import {Setting, Config} from 'src/command/init';
+import {Converter} from 'src/command/converter';
+import {promises as fs} from 'fs';
+import {Walker} from 'src/command/walker';
 import * as path from 'path';
 
 
@@ -34,7 +34,7 @@ export class Convert implements Walker {
     converter.exec();
 
     const outputFile = this.config.getOutputFile(inputFile);
-    fs.mkdir(path.dirname(outputFile), { recursive: true });
+    fs.mkdir(path.dirname(outputFile), {recursive: true});
     return converter.save(outputFile);
   }
 

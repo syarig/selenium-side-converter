@@ -1,8 +1,8 @@
 import * as util from 'src/util';
-import { SideFile, Test, Command } from 'src/template/sideFile';
-import { promises as fs } from 'fs';
+import {SideFile, Test, Command} from 'src/template/sideFile';
+import {promises as fs} from 'fs';
 import _ from 'lodash';
-import { SystemLogger } from 'src/logger/systemLogger';
+import {SystemLogger} from 'src/logger/systemLogger';
 
 export class Merge {
   static readJson: (input: string) => Promise<object>;
@@ -35,7 +35,7 @@ export class Merge {
   private async getCommands(testId: string, files: Array<string>): Promise<Array<Command>> {
     const source = files.shift() as string;
     const readedSource = await Merge.readJson(source) as SideFile;
-    const test: Test | undefined = _.find(readedSource.tests, { id: testId });
+    const test: Test | undefined = _.find(readedSource.tests, {id: testId});
     if (test === undefined) {
       SystemLogger.instance.log('Not found test of specified id');
       return [];
