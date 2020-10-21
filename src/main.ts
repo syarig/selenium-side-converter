@@ -45,7 +45,7 @@ function showHelp(): void {
   });
 }
 
-program.version('0.0.1', '-v, --version')
+program.version(require('../package.json').version, '-v, --version')
   .description('Convert selenium side file. Please enter side file.');
 
 program.command('convert').alias('c')
