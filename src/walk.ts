@@ -5,9 +5,9 @@ import path from 'path';
 
 
 export async function walk(dirpath: string, walker: Walker): Promise<void> {
-  let dirents: Array<fs.Dirent> = [];
+  let entries: Array<fs.Dirent> = [];
   try {
-    dirents = await walk.promises.readdir(dirpath, {withFileTypes: true});
+    entries = await walk.promises.readdir(dirpath, {withFileTypes: true});
 
 
   } catch (e) {
@@ -15,7 +15,7 @@ export async function walk(dirpath: string, walker: Walker): Promise<void> {
     return;
   }
 
-  dirents.forEach((dirent: fs.Dirent) => {
+  entries.forEach((dirent: fs.Dirent) => {
 
     const nextDirpath = path.join(dirpath, dirent.name);
     if (dirent.isDirectory()) {
