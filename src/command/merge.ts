@@ -6,7 +6,7 @@ import {SystemLogger} from 'src/logger/systemLogger';
 
 export class Merge {
   static readJson: (input: string) => Promise<object>;
-  private name: string;
+  private readonly name: string;
   private mergeEachFn: (target: Test, commands: Array<Command>) => void;
 
   constructor(name: string) {

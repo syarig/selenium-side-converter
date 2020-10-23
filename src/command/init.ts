@@ -47,7 +47,7 @@ const deafultConfig = {
 };
 
 export class Init {
-  private appPath: string
+  private readonly appPath: string
 
   constructor(appPath: string) {
     this.appPath = appPath;

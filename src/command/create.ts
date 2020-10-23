@@ -4,7 +4,7 @@ import * as init from 'src/command/init';
 
 
 export class Create {
-  private appPath: string;
+  private readonly appPath: string;
 
   constructor(appPath: string) {
     this.appPath = appPath;

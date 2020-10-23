@@ -7,8 +7,8 @@ import * as path from 'path';
 
 
 export class Convert implements Walker {
-  private config: Config;
-  private setting: Setting;
+  private readonly config: Config;
+  private readonly setting: Setting;
 
   constructor(config: Config, setting: Setting) {
     this.config = config;
