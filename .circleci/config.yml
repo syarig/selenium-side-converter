@@ -31,9 +31,6 @@ jobs:
       - checkout
       - restore_modules
       - run:
-          name: install dependencies
-          command: yarn install
-      - run:
           name: unit test
           command: yarn test
   release:
@@ -41,9 +38,6 @@ jobs:
     steps:
       - checkout
       - restore_modules
-      - run:
-          name: install dependencies
-          command: yarn install
       - run:
           name: release
           command: npm run semantic-release || true
