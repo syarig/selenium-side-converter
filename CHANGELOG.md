@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/syarig/selenium-side-converter/compare/v1.2.1...v1.3.0) (2020-10-23)
+
+
+### Bug Fixes
+
+* Require webpack merge ([319d58e](https://github.com/syarig/selenium-side-converter/commit/319d58e1ba69e47b2166acf97461f7d6a169087e))
+
+
+### Features
+
+* Modify variable name ([6071b13](https://github.com/syarig/selenium-side-converter/commit/6071b13011f1e6301ca2f2c0c93ac8324e5ff3b1))
+
 ## [1.2.1](https://github.com/syarig/selenium-side-converter/compare/v1.2.0...v1.2.1) (2020-10-23)
 
 
