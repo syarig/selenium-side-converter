@@ -1,8 +1,9 @@
 {
   "extends": [
-    "config:base"
+    "config:base",
+    "schedule:weekly"
   ],
-  "minor": {
-    "groupName": "all dependencies"
-  }
+  "timezone": "Asia/Tokyo",
+  "patch": { "automerge": true },
+  "lockFileMaintenance": { "enabled": true }
 }
