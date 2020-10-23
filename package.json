@@ -1,7 +1,7 @@
 {
   "name": "selenium-side-converter",
   "description": "Command line tool for converting template in selenium .side file. ",
-  "version": "1.1.4",
+  "version": "0.0.0-development",
   "author": "syarig",
   "bin": {
     "selenium-side-converter": "./bin/selenium-side-converter.js"
@@ -77,7 +77,6 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
-      "@semantic-release/github",
       "@semantic-release/npm",
       "@semantic-release/git"
     ]
@@ -91,6 +90,7 @@
     "lint": "eslint --ext .js --ignore-path .gitignore .",
     "prepare": "webpack --config webpack.prod.js",
     "test": "jest",
-    "watch": "npm run build -- --watch"
+    "watch": "npm run build -- --watch",
+    "semantic-release": "semantic-release"
   }
 }
