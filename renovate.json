@@ -1,7 +1,7 @@
 {
   "extends": [
     "config:base",
-    "schedule:weekends",
+    "schedule:monthly",
     "group:all"
   ],
   "timezone": "Asia/Tokyo"
