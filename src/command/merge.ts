@@ -28,8 +28,8 @@ export class Merge {
 
   public async exec(files: Array<string>, outputFile: string): Promise<void> {
     const result = await Merge.readJson(files.shift() as string) as SideFile;
-    if (this.name) result.name = name;
-    this.save(outputFile, await this.merge(files, result));
+    if (this.name) result.name = this.name;
+    return this.save(outputFile, await this.merge(files, result));
   }
 
   private async getCommands(testId: string, files: Array<string>): Promise<Array<Command>> {
