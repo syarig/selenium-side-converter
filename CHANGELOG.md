@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/syarig/selenium-side-converter/compare/v1.3.0...v1.3.1) (2020-12-05)
+
+
+### Bug Fixes
+
+* Small bug ([e266c25](https://github.com/syarig/selenium-side-converter/commit/e266c256499e9fa6de24e3592ccf28e8b20bf2f9))
+
 # [1.3.0](https://github.com/syarig/selenium-side-converter/compare/v1.2.1...v1.3.0) (2020-10-23)
 
 
